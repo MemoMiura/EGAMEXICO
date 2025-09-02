@@ -9,11 +9,16 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.utils.NavUtils
+import com.cursosant.insurance.common.utils.Constants
 import com.cursosant.insurance.databinding.ActivityMainBinding
 import com.cursosant.insurance.mainModule.view.MainActivity
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 /****
  * Project: EGAMexico
@@ -32,6 +37,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : MainActivity() {
     @Inject lateinit var navUtils: NavUtils
+    @Inject lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -77,9 +83,21 @@ class MainActivity : MainActivity() {
         }
 
         navView.inflateMenu(com.miurabox.ega.mexico.R.menu.activity_main_drawer_custom)
-        graph.setStartDestination(R.id.nav_home)
+
+        val hasSession = runBlocking {
+            val prefs = dataStore.data.first()
+            val email = prefs[Constants.K_EMAIL]
+            val password = prefs[Constants.K_PASSWORD]
+            !email.isNullOrBlank() && !password.isNullOrBlank()
+        }
+
+        if (hasSession) {
+            graph.setStartDestination(R.id.nav_home)
+        } else {
+            graph.setStartDestination(R.id.nav_login)
+        }
+
         navController.setGraph(graph, null)
-        navController.navigate(com.miurabox.ega.mexico.R.id.action_global_to_login)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
