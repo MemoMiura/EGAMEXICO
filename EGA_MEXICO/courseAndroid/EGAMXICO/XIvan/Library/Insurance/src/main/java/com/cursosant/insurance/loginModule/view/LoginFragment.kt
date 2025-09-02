@@ -80,10 +80,10 @@ open class LoginFragment : Fragment() {
     private fun setupObservers() {
         binding.viewModel?.let { vm ->
             vm.initialSetupEvent.observe(viewLifecycleOwner) { event ->
-                if (event == null){
-                    binding.containerForm.visibility = View.VISIBLE
-                } else {
-                    login(event.email, event.password)
+                binding.containerForm.visibility = View.VISIBLE
+                event?.let {
+                    binding.etUsername.setText(it.email)
+                    binding.etPassword.setText(it.password)
                 }
             }
             vm.inProgress.observe(viewLifecycleOwner) { result ->
