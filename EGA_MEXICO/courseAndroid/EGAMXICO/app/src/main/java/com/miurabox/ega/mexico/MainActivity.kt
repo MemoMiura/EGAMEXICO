@@ -77,9 +77,8 @@ class MainActivity : MainActivity() {
         }
 
         navView.inflateMenu(com.miurabox.ega.mexico.R.menu.activity_main_drawer_custom)
-        graph.setStartDestination(R.id.nav_home)
+        graph.setStartDestination(R.id.nav_login)
         navController.setGraph(graph, null)
-        navController.navigate(com.miurabox.ega.mexico.R.id.action_global_to_login)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
