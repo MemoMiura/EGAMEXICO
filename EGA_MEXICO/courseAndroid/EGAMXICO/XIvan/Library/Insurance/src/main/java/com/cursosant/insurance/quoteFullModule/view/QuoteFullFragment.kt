@@ -122,7 +122,7 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                             )
                         )
                     }
-                    vm.carTypes.observe(viewLifecycleOwner) { result ->
+                    vm.types.observe(viewLifecycleOwner) { result ->
                         spType.setAdapter(
                             ArrayAdapter(
                                 requireContext(),
@@ -176,7 +176,7 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                             )
                         )
                     }
-                    vm.suburbs.observe(viewLifecycleOwner) { result ->
+                    vm.suburbsList.observe(viewLifecycleOwner) { result ->
                         spSuburb.setAdapter(
                             ArrayAdapter(
                                 requireContext(),
@@ -212,14 +212,8 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                         cResult.spFrequency.setText(result[result.size - 1], false)
                     }
                 }
-                vm.quoteResponse.observe(viewLifecycleOwner) { result ->
+                vm.quote.observe(viewLifecycleOwner) { result ->
                     result?.let { goToResult() }
-                }
-                vm.serviceResponse.observe(viewLifecycleOwner) { result ->
-                    result?.let {
-                        adapter.add(it)
-                        refreshAdapterSize()
-                    }
                 }
             }
         }
@@ -253,7 +247,6 @@ class QuoteFullFragment : Fragment(), OnClickListener {
             spCoverage.setOnItemClickListener { _, _, position, _ ->
                 val coverage = resources.getStringArray(R.array.coverages_key)[position]
                 viewModel?.setCoverage(coverage)
-                User.instance?.let { viewModel?.getService(it.getTokenMultiQuote(), it.email) }
             }
         }
     }
@@ -296,7 +289,7 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                     tvCity.text = ""
                     spSuburb.run {
                         setText("")
-                        viewModel?.suburbs?.value?.let { suburbs ->
+                        viewModel?.suburbsList?.value?.let { suburbs ->
                             setAdapter(
                                 ArrayAdapter(
                                     requireContext(),
@@ -364,7 +357,31 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                 if (cbCP.isChecked) tilState else null,
                 if (cbCP.isChecked) tilCity else null
             )
-            if (isValid) User.instance?.let { viewModel?.getQuote(it.getTokenMultiQuote(), it.email) }
+            if (isValid) {
+                User.instance?.let { user ->
+                    viewModel?.let { vm ->
+                        val typeId = vm.types.value?.entries?.firstOrNull { it.value == vm.type.value }?.key ?: 0
+                        val modelId = vm.carModels.value?.firstOrNull { it.name == vm.model.value }?.value
+                        val stateId = vm.mxStates.value?.firstOrNull { it.name == vm.state.value }?.id
+                        vm.getQuote(
+                            user.getTokenMultiQuote(),
+                            vm.gender.value,
+                            vm.birthdate.value,
+                            typeId,
+                            vm.brand.value,
+                            vm.year.value,
+                            modelId,
+                            vm.model.value,
+                            vm.cp.value,
+                            stateId,
+                            vm.state.value,
+                            vm.city.value,
+                            vm.suburb.value,
+                            user.email
+                        )
+                    }
+                }
+            }
         }
     }
 

@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.User
-import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentDialogDeleteAccountBinding
 import com.cursosant.insurance.deleteAccountModule.viewModel.DeleteAccountViewModel
@@ -24,7 +23,6 @@ import javax.inject.Inject
 class DeleteAccountFragment : DialogFragment(), DialogInterface.OnShowListener {
 
     @Inject lateinit var utils: UiUtils
-    @Inject lateinit var navUtils: NavUtils
 
     private var _binding: FragmentDialogDeleteAccountBinding? = null
     private val binding get() = _binding!!
@@ -65,9 +63,9 @@ class DeleteAccountFragment : DialogFragment(), DialogInterface.OnShowListener {
                                     response.message,
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                // Evita ambigüedad con LiveData "dismiss"
-
+                                // Cierra el diálogo y regresa al login
                                 this@DeleteAccountFragment.dismiss()
+                                findNavController().navigate(R.id.nav_login)
 
                             }
                         }
@@ -99,16 +97,6 @@ class DeleteAccountFragment : DialogFragment(), DialogInterface.OnShowListener {
         binding.viewModel?.let { vm ->
             vm.snackbarMsg.observe(activity) { resMsg: Int ->
                 utils.snackbarLong(binding.root, resMsg)
-            }
-
-            // Usa nombre distinto + tipo explícito para evitar colisión con método dismiss()
-            vm.dismiss.observe(activity) { shouldDismiss: Boolean ->
-                if (shouldDismiss == true) {
-                    this@DeleteAccountFragment.dismiss()
-
-                    // Navega al login definido en tu nav_graph (id: nav_login)
-                    findNavController().navigate(R.id.nav_login)
-                }
             }
         }
     }
