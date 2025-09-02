@@ -362,6 +362,7 @@ class QuoteFullFragment : Fragment(), OnClickListener {
                     viewModel?.let { vm ->
                         val typeId = vm.types.value?.entries?.firstOrNull { it.value == vm.type.value }?.key ?: 0
                         val modelId = vm.carModels.value?.firstOrNull { it.name == vm.model.value }?.value
+
                         val stateId = vm.mxStates.value?.firstOrNull { it.name == vm.state.value }?.value
                         vm.getQuote(
                             user.getTokenMultiQuote(),
