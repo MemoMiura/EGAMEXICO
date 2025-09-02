@@ -39,6 +39,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
 
     // Navigation
     implementation(libs.navigation.fragment.ktx)
