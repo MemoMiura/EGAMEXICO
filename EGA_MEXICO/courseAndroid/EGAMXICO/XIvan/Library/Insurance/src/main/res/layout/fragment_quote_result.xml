@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.QuoteResultFragment">
+
+    <data>
+        <variable
+            name="email"
+            type="String" />
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.quoteResultModule.viewModel.QuoteResultViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/cMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/normal_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/common_padding_min"
+            android:paddingHorizontal="@dimen/common_padding_default">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCoverage"
+                android:hint="@string/quote_spinner_coverage"
+                style="@style/SpinnerDense">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/spCoverage"
+                    style="@style/SpinnerContent"/>
+                <!--android:text="@{viewModel.coverage}"-->
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilFrequency"
+                android:hint="@string/quote_spinner_frequency"
+                style="@style/SpinnerDense">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/spFrequency"
+                    android:text="@={viewModel.frequency}"
+                    style="@style/SpinnerContent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/common_padding_min"
+                android:orientation="vertical">
+                <TextView
+                    android:text="@{@string/quote_result_gender_age(viewModel.quoteRequest.gender, viewModel.quoteRequest.age)}"
+                    tools:text="Masculíno, 21 años"
+                    style="@style/TextItemBody"/>
+                <TextView
+                    android:text="@{email}"
+                    tools:text="correo@electronico.com"
+                    style="@style/TextItemBody"/>
+                <TextView
+                    android:text="@{@string/quote_result_suburb_city_state(viewModel.quoteRequest.suburb, viewModel.quoteRequest.city, viewModel.quoteRequest.state, viewModel.quoteRequest.cp)}"
+                    tools:text="Colonia, Ciudad, Estado, México, CP. 73023"
+                    style="@style/TextItemBody"/>
+                <TextView
+                    android:id="@+id/tvCarDescription"
+                    android:text="@{@string/quote_result_model_year(viewModel.quoteRequest.model, viewModel.quoteRequest.year)}"
+                    tools:text="Versa, 2016"
+                    style="@style/TextItemBody"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_quote_result"/>
+        </LinearLayout>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/quote_result_progress_msg}"/>
+
+        <include
+            android:id="@+id/retryContainer"
+            layout="@layout/retry_query"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.servicesSize == 0}"
+            app:msg="@{@string/quote_result_empty_msg}"/>
+    </FrameLayout>
+</layout>

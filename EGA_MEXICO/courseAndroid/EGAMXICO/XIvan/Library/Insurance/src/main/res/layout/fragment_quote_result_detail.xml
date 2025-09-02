@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.quoteResultDetailModule.viewModel.QuoteResultDetailViewModel" />
+        <variable
+            name="utils"
+            type="com.cursosant.insurance.common.utils.DateUtils" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/CardDetailContent"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/quote_result_detail_main_data_title"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_invoice}"
+                            app:description="@{viewModel.serviceResponse.folio_quote}"/>
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_contractor}"
+                            app:description="@{viewModel.serviceResponse.contractor}"/>
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_insurance}"
+                            app:description="@{viewModel.serviceResponse.name}"/>
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_package}"
+                            app:description="@{viewModel.serviceResponse.paquete}"/>
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_currency}"
+                            app:description="@{@string/quote_result_detail_currency_value}"/>
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/quote_result_detail_validity}"
+                            app:description="@{utils.getCustomTotalValidity(viewModel.serviceResponse.fecha_inicio, viewModel.serviceResponse.fecha_fin, viewModel.serviceResponse.patternDate)}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/CardDetailContent"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/quote_result_detail_concept_title"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_coverage"
+                            app:subtitle="@{@string/policy_detail_description}"
+                            app:description="@{viewModel.serviceResponse.carDescription}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/CardDetailContent"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/quote_result_detail_coverages_title"
+                            style="@style/TextDetailTitle"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvCoverage"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/card_detail_list_height_large"
+                            tools:listitem="@layout/item_coverage"
+                            tools:itemCount="2"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/CardDetailContent"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/quote_result_detail_pay_frequencies_title"
+                            style="@style/TextDetailTitle"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvPayFrequencies"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/card_detail_list_height_large"
+                            tools:listitem="@layout/item_pay_frequency"
+                            tools:itemCount="4"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!--<include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/policy_progress_msg}"/>
+
+        <include
+            android:id="@+id/retryContainer"
+            layout="@layout/retry_query"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.policy.id == 0}"
+            app:msg="@{@string/policy_empty_msg}"/>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

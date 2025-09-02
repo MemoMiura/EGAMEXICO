@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.notificationsModule.viewModel.NotificationsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_notification"/>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/notifications_progress_msg}"/>
+
+        <include
+            android:id="@+id/retryContainer"
+            layout="@layout/retry_query"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.notifications.size() == 0}"
+            app:msg="@{@string/notifications_empty_msg}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

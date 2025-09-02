@@ -1,0 +1,317 @@
+{
+  "project_info": {
+    "project_number": "53022512171",
+    "firebase_url": "https://kotlin-firebase-59bab-default-rtdb.firebaseio.com",
+    "project_id": "kotlin-firebase-59bab",
+    "storage_bucket": "kotlin-firebase-59bab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:60aa422d1c1440ee79466e",
+        "android_client_info": {
+          "package_name": "com.cursosandroidant.holafirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:210ce42c9d3e847879466e",
+        "android_client_info": {
+          "package_name": "com.cursosandroidant.nilo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-2ngcefuqrkphpt6dh9e472gn3nkf9j44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cursosandroidant.nilo",
+            "certificate_hash": "8e35e3211550e028865d046dbfade221265ae1fa"
+          }
+        },
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:f184d67cf7add9d079466e",
+        "android_client_info": {
+          "package_name": "com.cursosandroidant.nilopartner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-rehro84h4cl30a6b8ps0e566b7jts2jo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cursosandroidant.nilopartner",
+            "certificate_hash": "b4920556dc59af5d3a683f6def3e847e3b229307"
+          }
+        },
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:9d0ba375916dfc1e79466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.holafirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:bf95ee18819f5a8879466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.insurance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:290a0e550c80157b79466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.nilo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:5764f01d931d052779466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.nilopartner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:841b37ea755fb30079466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.nilopartnerref"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:50cf9165c41da69079466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.niloref"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53022512171:android:263dbb29e686334c79466e",
+        "android_client_info": {
+          "package_name": "com.cursosant.xpenses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5JXIINb0srMFgpL7qIU6AU0q8Za4SUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53022512171-7kj49ie3tprc4tagdke9947guul59hq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

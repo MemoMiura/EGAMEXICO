@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="description"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/common_padding_min">
+
+        <TextView
+            android:text="@{subtitle}"
+            tools:text="Subtítulo"
+            style="@style/TextItemSubtitle"/>
+        <TextView
+            android:text="@{description}"
+            tools:text="Nombre del elemento\ncon multiples\nlineas..."
+            style="@style/TextItemBody.TwoLines"/>
+            <!--style="@style/TextItemBodyWrap"/>-->
+    </LinearLayout>
+</layout>

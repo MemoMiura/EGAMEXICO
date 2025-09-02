@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="genders_key">
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+    <string-array name="genders_value">
+        <item>@string/common_gender_male</item>
+        <item>@string/common_gender_female</item>
+    </string-array>
+
+    <string-array name="coverages_key">
+        <item>Amplia</item>
+        <item>Limitada</item>
+        <item>RC</item>
+    </string-array>
+    <string-array name="coverages_value">
+        <item>@string/common_coverage_ample</item>
+        <item>@string/common_coverage_limited</item>
+        <item>@string/common_coverage_civil_liability</item>
+    </string-array>
+
+    <integer-array name="frequencies_key">
+        <item>12</item>
+        <item>3</item>
+        <item>6</item>
+        <item>1</item>
+    </integer-array>
+    <string-array name="frequencies_value">
+        <item>@string/common_frequency_monthly</item>
+        <item>@string/common_frequency_quarterly</item>
+        <item>@string/common_frequency_biannual</item>
+        <item>@string/common_frequency_annual</item>
+    </string-array>
+</resources>

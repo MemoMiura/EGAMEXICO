@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Insurance" parent="Base.Theme">
+        <!-- Primary brand color. -->
+        <!--<item name="colorPrimary">@color/color_primary_variant</item>
+        <item name="colorPrimaryVariant">@color/color_primary_dark</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        &lt;!&ndash; Secondary brand color. &ndash;&gt;
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="colorTertiary">@color/color_tertiary_light</item>
+        <item name="colorOnTertiary">@color/color_on_tertiary</item>
+        &lt;!&ndash; Backgrounds &ndash;&gt;
+        <item name="android:colorBackground">@color/color_on_background</item>
+        <item name="colorOnBackground">@color/color_text_light</item>
+        <item name="colorSurface">@color/color_surface_dark</item>
+        <item name="colorOnSurface">@color/color_secondary</item>
+        &lt;!&ndash; Status bar color. &ndash;&gt;
+        <item name="android:statusBarColor">@color/color_primary_variant_dark</item>-->
+    </style>
+</resources>

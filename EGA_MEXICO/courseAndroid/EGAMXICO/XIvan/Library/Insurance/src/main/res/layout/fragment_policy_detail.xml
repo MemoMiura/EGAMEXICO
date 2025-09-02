@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".policyDetailModule.view.PolicyDetailFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.policyDetailModule.viewModel.PolicyDetailViewModel" />
+        <variable
+            name="utils"
+            type="com.cursosant.insurance.common.utils.DateUtils" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/common_padding_default">
+
+                <!--  CELDA PRINCIPAL -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/CardDetailContent"
+                    tools:visibility="visible">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_main_data"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/item_policy_policy}"
+                            app:description="@{viewModel.policy.poliza_number}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/quote_result_detail_contractor}"
+                            app:description="@{viewModel.policy.contractor}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/quote_result_detail_insurance}"
+                            app:description="@{viewModel.policy.aseguradora.alias}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/item_policy_ramification}"
+                            app:description="@{viewModel.policy.ramo}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/item_policy_sub_ramification}"
+                            app:description="@{viewModel.policy.subramo}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/quote_result_detail_package}"
+                            app:description="@{viewModel.policy.paquete}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/quote_result_detail_currency}"
+                            app:description="@{viewModel.policy.currency}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/quote_result_detail_validity}"
+                            app:description="@{utils.getTotalValidity(viewModel.policy.start_of_validity, viewModel.policy.end_of_validity)}"
+                            app:hideDivider="@{true}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA AUTOS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.automobiles_policy.size() > 0}"
+                    style="@style/CardDetailContent"
+                    tools:visibility="gone">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_concept"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_description}"
+                            app:description="@{viewModel.policy.policyCar.brand}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_color}"
+                            app:description="@{viewModel.policy.policyCar.color}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_plates}"
+                            app:description="@{viewModel.policy.policyCar.license_plates}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_version}"
+                            app:description="@{viewModel.policy.policyCar.version}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_series}"
+                            app:description="@{viewModel.policy.policyCar.serial}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_engine}"
+                            app:description="@{viewModel.policy.policyCar.engine}"
+                            app:hideDivider="@{true}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA DAÑOS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.damages_policy.size() > 0}"
+                    style="@style/CardDetailContent"
+                    tools:visibility="gone">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_concept"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_insured_property}"
+                            app:description="@{viewModel.policy.damage.insured_item}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_details}"
+                            app:description="@{viewModel.policy.damage.item_details}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_address}"
+                            app:description="@{viewModel.policy.damage.item_address}"
+                            app:hideDivider="@{true}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA MEDICOS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.accidents_policy.size() > 0 || viewModel.policy.life_policy.size() > 0}"
+                    style="@style/CardDetailContent"
+                    tools:visibility="gone">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_concept"
+                            style="@style/TextDetailTitle"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_incumbent}"
+                            app:description="@{viewModel.policy.personal.fullName}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_birth_date}"
+                            app:description="@{utils.formatDateFromString(viewModel.policy.personal.birthdate)}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_gender}"
+                            app:description="@{viewModel.policy.personal.getGender(context)}"/>
+
+                        <include layout="@layout/content_field_policy"
+                            app:subtitle="@{@string/policy_detail_dependents}"
+                            app:hideDivider="@{true}"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvBeneficiary"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/policy_detail_list_height"
+                            tools:listitem="@layout/item_coverage"
+                            tools:itemCount="3"
+                            setVisibility="@{viewModel.policy.beneficiaries.size() > 0}"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA COBERTURAS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.coverageInPolicy_policy.size() > 0}"
+                    style="@style/CardDetailContent"
+                    tools:visibility="gone">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_coverages"
+                            style="@style/TextDetailTitle"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvCoverage"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/policy_detail_list_height"
+                            tools:listitem="@layout/item_coverage"
+                            tools:itemCount="3"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA RECIBOS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.recibos_poliza.size() > 0}"
+                    style="@style/CardDetailContent"
+                    tools:visibility="gone">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_receipts"
+                            style="@style/TextDetailTitle"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvReceipt"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/policy_detail_list_height"
+                            tools:listitem="@layout/item_receipt"
+                            tools:itemCount="3"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  CELDA ARCHIVOS -->
+                <com.google.android.material.card.MaterialCardView
+                    setVisibility="@{viewModel.policy.files.size() > 0}"
+                    style="@style/CardDetailContent">
+                    <LinearLayout
+                        style="@style/LinearDetailContent">
+                        <TextView
+                            android:text="@string/policy_detail_files"
+                            style="@style/TextDetailTitle"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvFilesPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/policy_detail_list_height"
+                            tools:listitem="@layout/item_file_pdf"
+                            tools:itemCount="3"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--  BOTONES -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="@dimen/common_padding_min">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShare"
+                        android:text="@string/policy_detail_btn_share"
+                        android:layout_marginEnd="@dimen/common_padding_micro"
+                        app:icon="@drawable/ic_share"
+                        style="@style/ButtonMenu.Action"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEdit"
+                        android:text="@string/policy_detail_btn_edit"
+                        android:layout_marginStart="@dimen/common_padding_micro"
+                        app:icon="@drawable/ic_edit_note"
+                        style="@style/ButtonMenu.Action"/>
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoTickets"
+                    android:text="@string/policy_detail_btn_go_tickets"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:icon="@drawable/ic_ticket"
+                    style="@style/ButtonMenu"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReport"
+                    android:text="@string/common_sinister"
+                    app:icon="@drawable/ic_crisis_alert"
+                    style="@style/ButtonMenu.Alert"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/policy_progress_msg}"/>
+
+        <include
+            android:id="@+id/retryContainer"
+            layout="@layout/retry_query"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.policy.id == 0}"
+            app:msg="@{@string/policy_empty_msg}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

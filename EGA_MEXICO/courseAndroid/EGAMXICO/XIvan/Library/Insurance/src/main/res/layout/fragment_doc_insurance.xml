@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.docSubramoModule.viewModel.DocSubramoViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_subramo"/>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/doc_subramos_progress_msg}"/>
+
+        <include
+            layout="@layout/retry_query"
+            android:id="@+id/retryContainer"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.subramos.size() == 0}"
+            app:msg="@{@string/doc_subramos_empty_msg}"/>
+    </FrameLayout>
+</layout>

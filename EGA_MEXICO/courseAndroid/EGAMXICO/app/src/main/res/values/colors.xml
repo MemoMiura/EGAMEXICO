@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="progress_transparent">#80000000</color>
+
+    <color name="color_primary_light">#797CC1</color>
+    <color name="color_primary">#2D3197</color>
+    <color name="color_primary_dark">#0C0F4C</color>
+    <color name="color_primary_variant">#2D3197</color>
+    <color name="color_primary_variant_dark">#0C0F4C</color>
+    <color name="color_on_primary">@color/white</color>
+
+    <color name="color_secondary_light">#E88787</color>
+    <color name="color_secondary">#DD4545</color>
+    <color name="color_secondary_variant">#811515</color>
+    <color name="color_on_secondary">@color/white</color>
+
+    <color name="color_tertiary_light">#E88787</color>
+    <color name="color_tertiary">#DD4545</color>
+    <color name="color_tertiary_variant">#811515</color>
+    <color name="color_on_tertiary">@color/white</color>
+
+    <color name="color_background">#FAFAFA</color>
+    <color name="color_on_background">#000000</color>
+    <color name="color_surface">#ffffff</color>
+    <color name="color_surface_dark">#1E1E1E</color>
+    <color name="color_on_surface">#000000</color>
+    <color name="color_error">#d50000</color>
+    <color name="color_on_error">#ffffff</color>
+
+    <color name="color_text_light">#C5C5C5</color>
+    <color name="color_text">#acacac</color>
+    <color name="color_text_dark">#828282</color>
+
+    <!--Extras-->
+    <color name="color_custom_background">#2D3197</color>
+</resources>

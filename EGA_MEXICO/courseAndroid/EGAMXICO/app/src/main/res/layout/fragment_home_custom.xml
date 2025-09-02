@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="name"
+            type="String" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/containerMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="?attr/colorPrimary"
+        tools:context=".homeModule.view.HomeFragment">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!--todo: fondo_menu should be renamed-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_broken_image"
+                    android:scaleType="centerCrop"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintDimensionRatio="16:9"/>
+
+                <TextView
+                    android:id="@+id/tvWelcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/common_padding_default"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:text="@{@string/home_custom_welcome(name)}"
+                    tools:text="BIENVENIDO\nCursos ANT"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imgCover"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAbout"
+                    android:text="@string/home_btn_we"
+                    app:icon="@drawable/ic_groups"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnPolicies"
+                    app:layout_constraintTop_toBottomOf="@id/tvWelcome"
+                    style="@style/ButtonMenuCustom"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPolicies"
+                    android:text="@string/menu_policies"
+                    app:icon="@drawable/ic_snippet_folder"
+                    app:layout_constraintStart_toEndOf="@id/btnAbout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvWelcome"
+                    style="@style/ButtonMenuCustom" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDocuments"
+                    android:text="@string/menu_documents"
+                    app:icon="@drawable/ic_library_books"
+                    app:layout_constraintStart_toStartOf="@id/btnPolicies"
+                    app:layout_constraintTop_toBottomOf="@id/btnPolicies"
+                    style="@style/ButtonMenuCustom"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnQuote"
+                    android:text="@string/home_btn_quote"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:icon="@drawable/ic_request_quote"
+                    app:layout_constraintStart_toStartOf="@id/btnAbout"
+                    app:layout_constraintTop_toBottomOf="@id/btnAbout"
+                    style="@style/ButtonMenuCustom"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCallEmergency"
+                    android:text="@string/common_call_emergency"
+                    app:icon="@drawable/ic_call"
+                    app:layout_constraintStart_toStartOf="@id/btnAbout"
+                    app:layout_constraintTop_toBottomOf="@id/btnQuote"
+                    style="@style/ButtonMenuCustom.Alert"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSinister"
+                    android:text="@string/common_sinister"
+                    app:icon="@drawable/ic_crisis_alert"
+                    app:layout_constraintStart_toStartOf="@id/btnPolicies"
+                    app:layout_constraintTop_toBottomOf="@id/btnDocuments"
+                    style="@style/ButtonMenuCustom.Alert"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

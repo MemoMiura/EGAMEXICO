@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.deleteAccountModule.viewModel.DeleteAccountViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/content_dialog_confirm"
+            app:title="@{@string/menu_delete_account}"
+            app:msg="@{@string/dialog_delete_account_msg}"/>
+    </FrameLayout>
+</layout>

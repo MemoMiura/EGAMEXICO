@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="receipt"
+            type="com.cursosant.insurance.common.entities.PolicyReceipt" />
+        <variable
+            name="utils"
+            type="com.cursosant.insurance.common.utils.DateUtils" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/common_padding_min">
+
+        <TextView
+            android:id="@+id/tvReceiptNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:text="@{String.valueOf(receipt.recibo_numero)}"
+            tools:text="21"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <include layout="@layout/content_field_coverage"
+            android:id="@+id/iValidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_padding_min"
+            android:layout_marginStart="@dimen/common_padding_min"
+            app:subtitle="@{@string/quote_result_detail_validity}"
+            app:description="@{utils.getTotalValidity(receipt.fecha_inicio, receipt.fecha_fin)}"
+            app:layout_constraintStart_toEndOf="@id/tvReceiptNumber"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <include layout="@layout/content_field_coverage"
+            android:id="@+id/iBonus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_padding_min"
+            android:layout_marginBottom="@dimen/common_padding_min"
+            app:subtitle="@{@string/policy_detail_receipt_bonus}"
+            app:description="@{receipt.prima_total}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <include layout="@layout/content_field_coverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:subtitle="@{@string/policy_detail_receipt_status}"
+            app:description="@{receipt.getStatusByGroup}"
+            app:layout_constraintStart_toStartOf="@id/iValidity"
+            app:layout_constraintTop_toBottomOf="@id/iValidity"
+            app:layout_constraintBottom_toTopOf="@id/iBonus"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

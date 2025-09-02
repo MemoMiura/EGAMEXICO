@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:id="@+id/containerMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="?attr/colorPrimary"
+        tools:context=".homeModule.view.HomeFragment">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!--todo: fondo_menu should be renamed-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_broken_image"
+                    android:scaleType="centerCrop"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintDimensionRatio="16:9"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAbout"
+                android:text="@string/home_btn_we"
+                app:icon="@drawable/ic_groups"
+                style="@style/ButtonMenu"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPolicies"
+                android:text="@string/menu_policies"
+                app:icon="@drawable/ic_snippet_folder"
+                style="@style/ButtonMenu"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnInsurance"
+                android:text="@string/menu_insurers"
+                app:icon="@drawable/ic_playlist_add_check_circle"
+                style="@style/ButtonMenu"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuote"
+                android:text="@string/home_btn_quote"
+                app:icon="@drawable/ic_request_quote"
+                android:visibility="gone"
+                style="@style/ButtonMenu"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCallEmergency"
+                android:text="@string/common_call_emergency"
+                app:icon="@drawable/ic_call"
+                style="@style/ButtonMenu.Alert"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSinister"
+                android:text="@string/common_sinister"
+                app:icon="@drawable/ic_crisis_alert"
+                style="@style/ButtonMenu.Alert"/>
+        </LinearLayout>
+    </ScrollView>
+</layout>

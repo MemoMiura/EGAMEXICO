@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="notification"
+            type="com.cursosant.insurance.common.entities.Notification" />
+        <variable
+            name="url"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".notificationDetailModule.view.AboutFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imgCover"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:importantForAccessibility="no"
+                tools:src="@drawable/ic_broken_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintDimensionRatio="16:9"
+                glideUrl="@{notification.imgUrl}"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/common_padding_default">
+                <TextView
+                    android:text="@{notification.title}"
+                    tools:text="Título de la notificación"
+                    style="@style/TextItemSubtitle"/>
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:layout_marginTop="@dimen/common_padding_default"
+                    android:text="@{notification.description}"
+                    tools:visibility="visible"
+                    tools:text="@string/about_description"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notification_detail_btn_url"
+                    android:layout_marginTop="@dimen/common_padding_default"
+                    app:setVisibility="@{notification.site != null &amp;&amp; !notification.site.isBlank()}"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <!--TODO: Revisar el backPressed, definir en qué pantallas debe regresar y en cuales debe terminar la app-->
+
+   <fragment
+        android:id="@+id/nav_login"
+        android:name="com.cursosant.insurance.loginModule.view.LoginFragment"
+        android:label="@string/login_title"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/nav_register" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true"/>
+    </fragment>
+     <!--<fragment
+        android:id="@+id/nav_register"
+        android:name="com.cursosant.insurance.registerModule.view.RegisterFragment"
+        android:label="@string/register_text"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/nav_login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.cursosant.insurance.homeModule.view.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/nav_login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.cursosant.insurance.aboutModule.view.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/action_about_to_privacy"
+            app:destination="@id/nav_privacy" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_contact"
+        android:name="com.cursosant.insurance.contactModule.view.ContactFragment"
+        android:label="@string/menu_contact"
+        tools:layout="@layout/fragment_contact" />
+
+    <fragment
+        android:id="@+id/nav_documents"
+        android:name="com.cursosant.insurance.documentsModule.view.DocumentsFragment"
+        android:label="@string/menu_documents"
+        tools:layout="@layout/fragment_documents" >
+        <action
+            android:id="@+id/action_documents_to_pdf"
+            app:destination="@id/nav_pdf" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_privacy"
+        android:name="com.cursosant.insurance.privacyModule.view.PrivacyFragment"
+        android:label="@string/about_btn_privacy"
+        tools:layout="@layout/fragment_privacy" />
+
+    <fragment
+        android:id="@+id/nav_pdf"
+        android:name="com.cursosant.insurance.pdfModule.view.PdfFragment"
+        android:label="@string/policy_pdf_title"
+        tools:layout="@layout/fragment_pdf">
+        <argument
+            android:name="url"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="name"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="false"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_insurers"
+        android:name="com.cursosant.insurance.insurersModule.view.InsurersFragment"
+        android:label="@string/menu_insurers"
+        tools:layout="@layout/fragment_insurers" />
+
+    <fragment
+        android:id="@+id/nav_policies"
+        android:name="com.cursosant.insurance.policiesModule.view.PoliciesFragment"
+        android:label="@string/menu_policies"
+        tools:layout="@layout/fragment_policies" >
+        <action
+            android:id="@+id/action_policies_to_policy_detail"
+            app:destination="@id/nav_policy_detail" >
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/nav_policy_detail"
+        android:name="com.cursosant.insurance.policyDetailModule.view.PolicyDetailFragment"
+        android:label="@string/policy_detail_title"
+        tools:layout="@layout/fragment_policy_detail">
+        <argument
+            android:name="idPolicy"
+            android:defaultValue="0L"
+            app:argType="long"
+            app:nullable="false"/>
+        <action
+            android:id="@+id/action_policy_detail_to_pdf"
+            app:destination="@id/nav_pdf" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_quote"
+        android:name="com.cursosant.insurance.quoteModule.view.QuoteFragment"
+        android:label="@string/home_btn_quote"
+        tools:layout="@layout/fragment_quote" >
+        <action
+            android:id="@+id/action_quote_to_quote_result"
+            app:destination="@id/nav_quote_result" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_quote_result"
+        android:name="com.cursosant.insurance.quoteResultModule.view.QuoteResultFragment"
+        android:label="@string/quote_result_title"
+        tools:layout="@layout/fragment_quote_result" />
+
+    <dialog
+        android:id="@+id/nav_call_emergency"
+        android:name="com.cursosant.insurance.callModule.view.CallFragmentDialog"
+        android:label="@string/common_call_emergency"
+        tools:layout="@layout/fragment_dialog_calling" />
+
+    <dialog
+        android:id="@+id/nav_delete_account"
+        android:name="com.cursosant.insurance.deleteAccountModule.view.DeleteAccountFragment"
+        android:label="@string/menu_delete_account"
+        tools:layout="@layout/fragment_dialog_delete_account" >
+        <action
+            android:id="@+id/action_delete_account_to_login"
+            app:destination="@id/nav_login" />
+    </dialog>
+    <dialog
+        android:id="@+id/nav_sign_out"
+        android:name="com.cursosant.insurance.signoutModule.view.SignoutDialogFragment"
+        android:label="@string/menu_sign_out"
+        tools:layout="@layout/fragment_dialog_signout" >
+        <action
+            android:id="@+id/action_sign_out_to_login"
+            app:destination="@id/nav_login" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/nav_sinister"
+        android:name="com.cursosant.insurance.sinisterModule.view.SinisterFragmentDialog"
+        android:label="@string/common_sinister"/>
+
+    <action
+        android:id="@+id/action_global_to_login"
+        app:destination="@id/nav_login"/>
+    <action
+        android:id="@+id/action_to_home"
+        app:destination="@id/nav_home"
+        app:popUpTo="@id/nav_quote"
+        app:popUpToInclusive="true"/>
+
+    <action
+        android:id="@+id/action_to_about"
+        app:destination="@id/nav_about"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>
+    <action
+        android:id="@+id/action_to_policies"
+        app:destination="@id/nav_policies"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>
+    <action
+        android:id="@+id/action_to_insurers"
+        app:destination="@id/nav_insurers"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_to_quote"
+        app:destination="@id/nav_quote"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>
+    <action
+        android:id="@+id/action_to_call_emergency"
+        app:destination="@id/nav_call_emergency"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>
+    <action
+        android:id="@+id/action_to_sinister"
+        app:destination="@id/nav_sinister"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>-->
+</navigation>

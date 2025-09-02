@@ -1,0 +1,59 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.EGAMEXICO" parent="Theme.Insurance.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="colorTertiary">@color/color_tertiary</item>
+        <item name="colorOnTertiary">@color/color_on_tertiary</item>
+        <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorOnBackground">@color/color_on_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+        <item name="colorError">@color/color_error</item>
+        <item name="colorOnError">@color/color_on_error</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- Types -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.EGAMÉXICO.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.EGAMÉXICO.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.EGAMÉXICO.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.EGAMÉXICO.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.EGAMÉXICO.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.EGAMÉXICO.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.EGAMÉXICO.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.EGAMÉXICO.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.EGAMÉXICO.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.EGAMÉXICO.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.EGAMÉXICO.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.EGAMÉXICO.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.EGAMÉXICO.Overline</item>
+
+        <!--Button-->
+        <item name="materialButtonStyle">@style/CustomMainButton</item>
+    </style>
+
+    <style name="CustomMainButton" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/CustomPrimaryButton</item>
+    </style>
+    <style name="CustomPrimaryButton">
+        <item name="colorPrimary">?attr/colorTertiary</item>
+    </style>
+
+    <!--SplashScreen-->
+    <style name="Theme.EGAMÉXICO.Splash" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/color_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/color_background</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="postSplashScreenTheme">@style/Theme.EGAMEXICO</item>
+    </style>
+</resources>

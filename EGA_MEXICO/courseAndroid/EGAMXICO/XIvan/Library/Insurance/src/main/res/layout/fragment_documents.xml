@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.DocumentsFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.documentsModule.viewModel.DocumentsViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_file_pdf"/>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/documents_progress_msg}"/>
+
+        <include
+            layout="@layout/retry_query"
+            android:id="@+id/retryContainer"
+            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.documentResponse.results.size() == 0}"
+            app:msg="@{@string/documents_empty_msg}"/>
+    </FrameLayout>
+</layout>

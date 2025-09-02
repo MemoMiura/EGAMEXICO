@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_groups"
+            android:title="@string/menu_about" />
+        <item
+            android:id="@+id/nav_policies"
+            android:icon="@drawable/ic_snippet_folder"
+            android:title="@string/menu_policies" />
+        <item
+            android:id="@+id/nav_quote"
+            android:icon="@drawable/ic_request_quote"
+            android:title="@string/home_btn_quote"
+            android:visible="true"/>
+        <item
+            android:id="@+id/nav_insurers"
+            android:icon="@drawable/ic_playlist_add_check_circle"
+            android:title="@string/menu_insurers"/>
+        <item
+            android:id="@+id/nav_documents"
+            android:icon="@drawable/ic_library_books"
+            android:title="@string/menu_documents"/>
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_perm_phone_msg"
+            android:title="@string/menu_contact"/>
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/menu_sign_out"/>
+
+        <item
+            android:id="@+id/extrasGroup"
+            android:title="@string/menu_extras_group">
+            <menu>
+                <item
+                    android:id="@+id/nav_call_emergency_custom"
+                    android:icon="@drawable/ic_call"
+                    android:title="@string/common_call_emergency"/>
+                <item
+                    android:id="@+id/nav_sinister"
+                    android:icon="@drawable/ic_crisis_alert"
+                    android:title="@string/common_sinister"/>
+                <item
+                    android:id="@+id/nav_delete_account"
+                    android:icon="@drawable/ic_person_off"
+                    android:title="@string/menu_delete_account"/>
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/privacyGroup"
+            android:title="@string/menu_privacy">
+            <menu>
+                <item
+                    android:id="@+id/nav_privacy"
+                    android:title="@string/menu_notice_privacy"/>
+            </menu>
+        </item>
+    </group>
+</menu>

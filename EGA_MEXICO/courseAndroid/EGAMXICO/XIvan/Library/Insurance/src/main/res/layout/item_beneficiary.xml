@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="beneficiary"
+            type="com.cursosant.insurance.common.entities.LifeBeneficiary" />
+        <variable
+            name="utils"
+            type="com.cursosant.insurance.common.utils.DateUtils" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/content_field_coverage"
+            app:subtitle="@{@string/hint_name}"
+            app:description="@{beneficiary.fullName}"/>
+
+        <include layout="@layout/content_field_coverage"
+            app:subtitle="@{@string/policy_detail_birth_date}"
+            app:description="@{utils.formatDateFromString(beneficiary.birthdate)}"/>
+
+        <include layout="@layout/content_field_coverage"
+            app:subtitle="@{@string/policy_detail_gender}"
+            app:description="@{beneficiary.getGender(context)}"/>
+
+        <include layout="@layout/content_field_coverage"
+            app:subtitle="@{@string/policy_detail_relationship}"
+            app:description="@{beneficiary.optional_relationship}"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/common_padding_micro"/>
+    </LinearLayout>
+</layout>

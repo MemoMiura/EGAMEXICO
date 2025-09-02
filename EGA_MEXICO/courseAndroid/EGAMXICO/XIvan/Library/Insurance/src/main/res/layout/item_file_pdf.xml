@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="file"
+            type="com.cursosant.insurance.common.entities.FilePDF" />
+        <variable
+            name="document"
+            type="com.cursosant.insurance.common.entities.Document" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/listPreferredItemHeight"
+        android:layout_marginHorizontal="@dimen/common_padding_min"
+        android:layout_marginTop="@dimen/common_padding_min">
+        <TextView
+            android:id="@+id/files_text_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/common_padding_min"
+            android:lines="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:text="@{file != null ? file.nombre : document.nombre}"
+            android:drawablePadding="@dimen/common_padding_min"
+            tools:text="Nombre del archivo .pdf"
+            app:drawableTint="?attr/colorTertiary"
+            app:drawableStartCompat="@drawable/ic_picture_as_pdf"/>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

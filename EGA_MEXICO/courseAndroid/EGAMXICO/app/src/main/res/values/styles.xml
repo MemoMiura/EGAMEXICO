@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Home-->
+    <style name="ButtonMenuCustom">
+        <item name="android:layout_width">@dimen/home_btn_width_custom</item>
+        <item name="android:layout_height">@dimen/home_btn_height_custom</item>
+        <item name="android:layout_marginTop">@dimen/common_padding_min</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="iconTint">@drawable/state_icon_tertiary</item>
+        <item name="iconGravity">textTop</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonMenuCustom.Alert">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="backgroundTint">?attr/colorSecondary</item>
+        <item name="iconTint">?attr/colorOnSecondary</item>
+    </style>
+</resources>

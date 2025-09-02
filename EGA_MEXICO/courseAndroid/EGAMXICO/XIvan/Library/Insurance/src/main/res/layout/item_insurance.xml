@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="insurance"
+            type="com.cursosant.insurance.common.entities.Insurance" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/listPreferredItemHeight"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/common_padding_min"
+        android:layout_marginTop="@dimen/common_padding_min">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:lines="2"
+            android:ellipsize="end"
+            android:layout_margin="@dimen/common_padding_min"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:text="@{insurance.compania}"
+            tools:text="Nombre del proveedor"/>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

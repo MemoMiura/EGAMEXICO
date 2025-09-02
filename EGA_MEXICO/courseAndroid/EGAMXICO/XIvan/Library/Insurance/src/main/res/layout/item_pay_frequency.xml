@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="payFrequency"
+            type="com.cursosant.insurance.common.entities.QuotePayFrequency" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/listPreferredItemHeight">
+        <include layout="@layout/content_field_pay_frequency"
+            app:subtitle="@{payFrequency.tipe}"
+            app:frequency="@{payFrequency.description}"
+            app:status="@{payFrequency.total_amount}"/>
+    </FrameLayout>
+</layout>

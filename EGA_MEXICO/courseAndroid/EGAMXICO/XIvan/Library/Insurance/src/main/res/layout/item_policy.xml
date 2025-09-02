@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="policy"
+            type="com.cursosant.insurance.common.entities.Policy" />
+        <variable
+            name="utils"
+            type="com.cursosant.insurance.common.utils.DateUtils" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_padding_min"
+        android:layout_marginHorizontal="@dimen/common_padding_min">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/containerHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="?attr/colorPrimary"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="@dimen/item_policy_img_size"
+                    android:layout_height="@dimen/item_policy_img_size"
+                    android:background="@color/white"
+                    android:layout_margin="@dimen/common_padding_min"
+                    android:importantForAccessibility="no"
+                    android:tint="?attr/colorTertiary"
+                    tools:src="@drawable/ic_price_check"
+                    app:contentPadding="@dimen/common_padding_min"
+                    app:imgSubramo="@{policy.subramo}"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/policies_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:text="@{policy.description}"
+                    android:paddingStart="@dimen/common_padding_none"
+                    android:paddingEnd="@dimen/common_padding_min"
+                    tools:text="Descripción sobre la póliza a listar en el recyclerview de android"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/common_padding_min"
+                app:layout_constraintTop_toBottomOf="@id/containerHeader">
+                <include layout="@layout/content_field_policy"
+                    app:subtitle="@{@string/quote_result_detail_contractor}"
+                    app:description="@{policy.contractor}"/>
+
+                <include layout="@layout/content_field_policy"
+                    app:subtitle="@{@string/quote_result_detail_insurance}"
+                    app:description="@{policy.aseguradora}"/>
+
+                <include layout="@layout/content_field_policy"
+                    app:subtitle="@{@string/quote_result_detail_validity}"
+                    app:description="@{utils.getTotalValidity(policy.start_of_validity, policy.end_of_validity)}"/>
+
+                <include layout="@layout/content_field_policy"
+                    app:subtitle="@{@string/item_policy_policy}"
+                    app:description="@{policy.poliza_number}"/>
+
+                <include layout="@layout/content_field_policy"
+                    app:subtitle="@{@string/quote_result_detail_package}"
+                    app:description="@{policy.paquete}"
+                    app:hideDivider="@{true}"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

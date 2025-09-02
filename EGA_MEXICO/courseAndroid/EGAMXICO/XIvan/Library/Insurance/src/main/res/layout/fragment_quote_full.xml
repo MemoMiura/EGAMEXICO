@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".quoteFullModule.view.QuoteFullFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cursosant.insurance.quoteFullModule.viewModel.QuoteFullViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/cMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/content_quote"
+            android:id="@+id/cForm"
+            tools:visibility="gone"/>
+
+        <include layout="@layout/content_quote_result"
+            android:id="@+id/cResult"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <include
+            layout="@layout/progress_full_screen"
+            app:inProgress="@{viewModel.inProgress}"
+            app:msg="@{@string/quote_result_progress_msg}"/>
+    </FrameLayout>
+</layout>
