@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cursosant.insurance.R
+import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.databinding.ActivityMainBinding
 import com.cursosant.insurance.mainModule.view.MainActivity
@@ -77,9 +78,9 @@ class MainActivity : MainActivity() {
         }
 
         navView.inflateMenu(com.miurabox.ega.mexico.R.menu.activity_main_drawer_custom)
-        graph.setStartDestination(R.id.nav_home)
+        val startDestination = if (User.instance != null) R.id.nav_home else R.id.nav_login
+        graph.setStartDestination(startDestination)
         navController.setGraph(graph, null)
-        navController.navigate(com.miurabox.ega.mexico.R.id.action_global_to_login)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
