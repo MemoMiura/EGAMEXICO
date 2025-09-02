@@ -3,11 +3,13 @@ package com.cursosant.insurance.quoteFullModule.model
 import android.content.Context
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.dataAccess.MultiQuoteService
+import com.cursosant.insurance.common.dataAccess.UserService
 import com.cursosant.insurance.common.entities.CP
 import com.cursosant.insurance.common.entities.QuoteBasic
 import com.cursosant.insurance.common.entities.QuoteResponse
 import com.cursosant.insurance.common.entities.State
 import com.cursosant.insurance.common.entities.SuburbsResponse
+import com.cursosant.insurance.common.utils.Constants
 import com.cursosant.insurance.common.utils.DateUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -16,6 +18,7 @@ class QuoteFullRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val dataSource: DataSource,
     private val multiQuoteService: MultiQuoteService,
+    private val userService: UserService,
     private val date: DateUtils
 ) {
     fun getGenders(): List<String> {
@@ -69,6 +72,15 @@ class QuoteFullRepository @Inject constructor(
 
     fun getFrequencies(): List<String> {
         return context.resources.getStringArray(R.array.frequencies_value).toList()
+    }
+
+    suspend fun loginMultiQuoter(username: String, password: String): String? {
+        val params: MutableMap<String, String> = hashMapOf()
+        params[Constants.P_USERNAME] = username
+        params[Constants.P_PASSWORD] = password
+        params[Constants.P_URL_NAME] = Constants.V_URL_NAME
+        params[Constants.P_ORGANIZATION] = Constants.V_ORGANIZATION
+        return userService.loginMultiQuoter(params)?.token
     }
 
     suspend fun getQuote(
