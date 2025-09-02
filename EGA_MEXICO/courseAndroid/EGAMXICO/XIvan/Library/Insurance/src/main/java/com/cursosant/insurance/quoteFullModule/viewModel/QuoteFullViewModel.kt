@@ -107,8 +107,8 @@ class QuoteFullViewModel @Inject constructor(
     private val _cpInfo = MutableLiveData<CP>()
     val cpInfo: LiveData<CP> get() = _cpInfo
 
-    private val _quote = MutableLiveData<QuoteResponse>()
-    val quote: LiveData<QuoteResponse> get() = _quote
+    private val _quote = MutableLiveData<QuoteResponse?>()
+    val quote: LiveData<QuoteResponse?> get() = _quote
 
     // === Cargas ===
     fun getAllGenders() { _genders.value = repository.getGenders() }
@@ -119,24 +119,24 @@ class QuoteFullViewModel @Inject constructor(
     fun getStates(token: String) { viewModelScope.launch { _states.value = repository.getStates(token) } }
     fun getCities(token: String) {
         viewModelScope.launch {
-            val stateId = _states.value?.firstOrNull { it.name == state.value }?.id
+            val stateId = _states.value?.firstOrNull { it.name == state.value }?.value
             _cities.value = repository.getCities(token, stateId)
         }
     }
     fun getSuburbs(token: String) {
         viewModelScope.launch {
-            val stateId = _states.value?.firstOrNull { it.name == state.value }?.id
+            val stateId = _states.value?.firstOrNull { it.name == state.value }?.value
             _suburbs.value = repository.getSuburbs(token, stateId, city.value)
         }
     }
     fun getSuburbsByCP(token: String) {
         viewModelScope.launch {
-            _suburbs.value = repository.getSuburbsByCP(token, cp.value).suburbs.map { it.name }
+            _suburbs.value = repository.getSuburbsByCP(token, cp.value).colonias?.map { it.name } ?: emptyList()
         }
     }
     fun getCP(token: String) {
         viewModelScope.launch {
-            val stateId = _states.value?.firstOrNull { it.name == state.value }?.id
+            val stateId = _states.value?.firstOrNull { it.name == state.value }?.value
             _cpInfo.value = repository.getCP(token, stateId, city.value, suburb.value)
         }
     }
@@ -171,5 +171,13 @@ class QuoteFullViewModel @Inject constructor(
                 modelId, model, cp, stateId, state, city, suburb, email
             )
         }
+    }
+
+    fun loginMultiQuoter(username: String, password: String) = viewModelScope.launch {
+        _token.value = repository.loginMultiQuoter(username, password)
+    }
+
+    fun pause() {
+        _quote.value = null
     }
 }
