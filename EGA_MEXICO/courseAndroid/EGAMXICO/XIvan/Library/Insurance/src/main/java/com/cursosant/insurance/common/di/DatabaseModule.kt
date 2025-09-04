@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -26,9 +27,10 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    @Named("UserRetrofit")
+    fun provideUserRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL) // 👈 asegúrate de que BASE_URL está en Constants
+            .baseUrl(Constants.BASE_USER_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -36,16 +38,38 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideUserService(retrofit: Retrofit): UserService =
+    @Named("MiuraboxRetrofit")
+    fun provideMiuraboxRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_MIURABOX_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("MultiQuoteRetrofit")
+    fun provideMultiQuoteRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_MULTI_QUOTE)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserService(@Named("UserRetrofit") retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
 
     @Provides
     @Singleton
-    fun provideMultiQuoteService(retrofit: Retrofit): MultiQuoteService =
+    fun provideMultiQuoteService(@Named("MultiQuoteRetrofit") retrofit: Retrofit): MultiQuoteService =
         retrofit.create(MultiQuoteService::class.java)
 
     @Provides
     @Singleton
-    fun provideMiuraboxService(retrofit: Retrofit): MiuraboxService =
+    fun provideMiuraboxService(@Named("MiuraboxRetrofit") retrofit: Retrofit): MiuraboxService =
         retrofit.create(MiuraboxService::class.java)
 }
