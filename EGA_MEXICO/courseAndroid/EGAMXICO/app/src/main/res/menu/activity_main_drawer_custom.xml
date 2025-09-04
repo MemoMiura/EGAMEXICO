@@ -20,7 +20,7 @@
             android:id="@+id/nav_quote"
             android:icon="@drawable/ic_request_quote"
             android:title="@string/home_btn_quote"
-            android:visible="true"/>
+            android:visible="false"/>
         <item
             android:id="@+id/nav_insurers"
             android:icon="@drawable/ic_playlist_add_check_circle"
