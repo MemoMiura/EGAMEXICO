@@ -32,11 +32,19 @@ class RegisterViewModel @Inject constructor(
     private val _registerResult = MutableLiveData<RegisterResponse>()
     val registerResult: LiveData<RegisterResponse> = _registerResult
 
+    private val _showSuccessDialog = MutableLiveData<Boolean>()
+    val showSuccessDialog: LiveData<Boolean> = _showSuccessDialog
+
     fun register(first: String, last: String, email: String, pass: String) {
         executeAction {
             repository.register(first, last, email, pass) { result ->
                 _registerResult.postValue(result)
+                _showSuccessDialog.postValue(true)
             }
         }
+    }
+
+    fun onSuccessDialogConsumed() {
+        _showSuccessDialog.value = false
     }
 }
