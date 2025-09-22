@@ -178,6 +178,7 @@
     <string name="notifications_empty_msg">No hay notificaciones</string>
 
     <string name="register_error">El email ya existe.</string>
+    <string name="register_success_title">Registro exitoso</string>
     <string name="register_user_created">Usuario creado exitosamente, para inicar sesión le hemos enviado un correo de activación.</string>
     <string name="register_empty_email">Ingresa un correo electrónico</string>
     <string name="register_empty_password_confirm">Confirma la contraseña</string>
@@ -274,6 +275,7 @@
     <string name="hint_msg">Mensaje</string>
     <string name="menu_sign_out">Cerrar sesión</string>
     <string name="menu_delete_account">Borrar cuenta</string>
+    <string name="menu_delete_account_discreet"><font color="@color/color_text_light"><small>Borrar cuenta</small></font></string>
     <string name="menu_extras_group">Extras</string>
     <string name="dialog_sign_out_msg">¿Estas seguro de cerrar tu sesión actual?</string>
     <string name="dialog_cancel">Cancelar</string>
