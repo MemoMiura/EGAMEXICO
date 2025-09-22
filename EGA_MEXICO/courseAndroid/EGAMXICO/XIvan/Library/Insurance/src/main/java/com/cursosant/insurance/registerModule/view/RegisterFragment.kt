@@ -79,6 +79,13 @@ open class RegisterFragment : Fragment() {
                     showRegisterSuccessDialog()
                 }
             }
+            vm.navigateToLogin.observe(viewLifecycleOwner) { shouldNavigate ->
+                if (shouldNavigate == true) {
+                    navUtils.run { navController.navigate(actionRegisterToLogin) }
+                    vm.onNavigatedToLogin()
+                }
+            }
+
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
                 if (isHide) uiUtils.hideKeyboard(binding.root)
             }

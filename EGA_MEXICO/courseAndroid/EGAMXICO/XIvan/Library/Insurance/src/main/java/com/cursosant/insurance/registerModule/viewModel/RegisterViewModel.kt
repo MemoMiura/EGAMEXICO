@@ -3,10 +3,9 @@ package com.cursosant.insurance.registerModule.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cursosant.insurance.R
-import com.cursosant.insurance.common.entities.RegisterResponse
-import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.registerModule.model.RegisterRepository
+import com.cursosant.insurance.registerModule.model.RegisterResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -29,8 +28,14 @@ class RegisterViewModel @Inject constructor(
     private val repository: RegisterRepository
 ) : BaseViewModel() {
 
-    private val _registerResult = MutableLiveData<RegisterResponse>()
-    val registerResult: LiveData<RegisterResponse> = _registerResult
+    private val _registerResult = MutableLiveData<RegisterResult.Success>()
+    val registerResult: LiveData<RegisterResult.Success> = _registerResult
+
+    private val _showSuccessDialog = MutableLiveData<Boolean>()
+    val showSuccessDialog: LiveData<Boolean> = _showSuccessDialog
+
+    private val _navigateToLogin = MutableLiveData<Boolean>()
+    val navigateToLogin: LiveData<Boolean> = _navigateToLogin
 
     private val _showSuccessDialog = MutableLiveData<Boolean>()
     val showSuccessDialog: LiveData<Boolean> = _showSuccessDialog
@@ -38,9 +43,21 @@ class RegisterViewModel @Inject constructor(
     fun register(first: String, last: String, email: String, pass: String) {
         executeAction {
             repository.register(first, last, email, pass) { result ->
-                _registerResult.postValue(result)
-                showMsg(R.string.register_user_created)
-                _showSuccessDialog.postValue(true)
+                when (result) {
+                    is RegisterResult.Success -> {
+                        _registerResult.postValue(result)
+                        showMsg(R.string.register_user_created)
+                        _showSuccessDialog.postValue(true)
+                    }
+                    RegisterResult.AlreadyRegisteredInactive -> {
+                        showWarning(R.string.register_user_exists_inactive)
+                    }
+                    RegisterResult.AlreadyRegisteredActive -> {
+                        showMsg(R.string.register_user_already_active)
+                        _navigateToLogin.postValue(true)
+                    }
+                }
+
             }
         }
     }
@@ -48,4 +65,9 @@ class RegisterViewModel @Inject constructor(
     fun onSuccessDialogConsumed() {
         _showSuccessDialog.value = false
     }
+
+    fun onNavigatedToLogin() {
+        _navigateToLogin.value = false
+    }
+
 }
