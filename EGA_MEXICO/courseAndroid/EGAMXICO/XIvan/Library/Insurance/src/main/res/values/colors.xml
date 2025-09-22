@@ -31,6 +31,7 @@
     <color name="color_on_error">#ffffff</color>
 
     <color name="color_text_light">#C5C5C5</color>
+    <color name="color_text_delete_account_discreet">#B0B0B0</color>
     <color name="color_text">#acacac</color>
     <color name="color_text_dark">#828282</color>
 

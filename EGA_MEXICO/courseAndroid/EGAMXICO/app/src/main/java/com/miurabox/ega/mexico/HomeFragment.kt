@@ -23,6 +23,5 @@ class HomeFragment : HomeFragment() {
         super.onStart()
         setImgCover(R.drawable.fondo_menu)
         setBackgroundColor(R.color.color_custom_background)
-        showQuoter()
     }
 }
