@@ -198,6 +198,7 @@ object Constants {
 
     //Network Response
     const val STATUS_OK = "200"
+    const val STATUS_BAD_REQUEST = "400"
 
     //Notifications
     const val TOPIC_NEWS = "news"
