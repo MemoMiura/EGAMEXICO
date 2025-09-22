@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentRegisterBinding
 import com.cursosant.insurance.registerModule.viewModel.RegisterViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,6 +45,7 @@ open class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+    private var successDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
@@ -70,6 +73,11 @@ open class RegisterFragment : Fragment() {
             }
             vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
                 uiUtils.snackbarWarning(binding.root, resMsg)
+            }
+            vm.showSuccessDialog.observe(viewLifecycleOwner) { shouldShow ->
+                if (shouldShow == true) {
+                    showRegisterSuccessDialog()
+                }
             }
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
                 if (isHide) uiUtils.hideKeyboard(binding.root)
@@ -134,6 +142,8 @@ open class RegisterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        successDialog?.dismiss()
+        successDialog = null
         _binding = null
     }
 
@@ -166,5 +176,25 @@ open class RegisterFragment : Fragment() {
             tilPasswordConfirm.hintTextColor = colorState
             tilPasswordConfirm.boxStrokeColor = color
         }
+    }
+
+    private fun showRegisterSuccessDialog() {
+        val currentBinding = _binding ?: return
+        if (successDialog?.isShowing == true) return
+
+        successDialog = MaterialAlertDialogBuilder(currentBinding.root.context)
+            .setTitle(R.string.register_success_title)
+            .setMessage(R.string.register_user_created)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+                currentBinding.viewModel?.onSuccessDialogConsumed()
+                navUtils.run { navController.navigate(actionRegisterToLogin) }
+            }
+            .setOnDismissListener {
+                currentBinding.viewModel?.onSuccessDialogConsumed()
+                successDialog = null
+            }
+            .setCancelable(false)
+            .show()
     }
 }
