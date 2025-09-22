@@ -178,6 +178,7 @@
     <string name="notifications_empty_msg">No hay notificaciones</string>
 
     <string name="register_error">El email ya existe.</string>
+    <string name="register_success_title">Registro exitoso</string>
     <string name="register_user_created">Usuario creado exitosamente, para inicar sesión le hemos enviado un correo de activación.</string>
     <string name="register_empty_email">Ingresa un correo electrónico</string>
     <string name="register_empty_password_confirm">Confirma la contraseña</string>
