@@ -85,6 +85,7 @@ open class RegisterFragment : Fragment() {
                     vm.onNavigatedToLogin()
                 }
             }
+
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
                 if (isHide) uiUtils.hideKeyboard(binding.root)
             }
