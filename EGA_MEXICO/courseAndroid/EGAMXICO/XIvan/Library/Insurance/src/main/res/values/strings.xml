@@ -275,7 +275,7 @@
     <string name="hint_msg">Mensaje</string>
     <string name="menu_sign_out">Cerrar sesión</string>
     <string name="menu_delete_account">Borrar cuenta</string>
-    <string name="menu_delete_account_discreet"><font color="@color/color_text_light"><small>Borrar cuenta</small></font></string>
+    <string name="menu_delete_account_discreet"><font color="@color/color_text_delete_account_discreet"><small><small>Borrar cuenta</small></small></font></string>
     <string name="menu_extras_group">Extras</string>
     <string name="dialog_sign_out_msg">¿Estas seguro de cerrar tu sesión actual?</string>
     <string name="dialog_cancel">Cancelar</string>

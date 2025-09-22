@@ -55,7 +55,8 @@
                     android:id="@+id/nav_delete_account"
                     android:icon="@drawable/ic_person_off"
                     android:title="@string/menu_delete_account_discreet"
-                    app:iconTint="@color/color_text_light"/>
+                    app:iconTint="@color/color_text_delete_account_discreet"/>
+
             </menu>
         </item>
 
