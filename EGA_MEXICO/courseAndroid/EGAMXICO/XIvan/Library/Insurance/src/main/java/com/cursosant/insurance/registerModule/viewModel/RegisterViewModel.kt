@@ -39,6 +39,7 @@ class RegisterViewModel @Inject constructor(
         executeAction {
             repository.register(first, last, email, pass) { result ->
                 _registerResult.postValue(result)
+                showMsg(R.string.register_user_created)
                 _showSuccessDialog.postValue(true)
             }
         }
