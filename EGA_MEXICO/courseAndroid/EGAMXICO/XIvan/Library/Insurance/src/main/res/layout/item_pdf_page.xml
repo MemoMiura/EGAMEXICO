@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_padding_min"
+        android:layout_marginBottom="@dimen/common_padding_min">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/pdfPageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/pdf_page_placeholder_description"
+            android:importantForAccessibility="yes"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
+</layout>

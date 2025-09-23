@@ -79,7 +79,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // PDF Viewer
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
 
     // javax.inject

@@ -232,6 +232,8 @@
     <string name="pdf_load_error">Error al cargar el archivo.</string>
     <string name="pdf_compat_error">Solo se pueden visualizar archivos PDF.</string>
     <string name="pdf_chooser_title">Compartir…</string>
+    <string name="pdf_page_placeholder_description">Vista previa de la página del documento PDF.</string>
+    <string name="pdf_page_content_description">Página %1$d de %2$d del documento PDF.</string>
 
     <string name="documents_empty_msg">No hay documentos</string>
     <string name="documents_progress_msg">Consultando documentos…</string>
