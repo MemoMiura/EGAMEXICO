@@ -51,7 +51,10 @@ class PdfPageAdapter(
                     return@withContext
                 }
                 pageCache.put(position, bitmap)
-                if (holder.bindingAdapterPosition == position) {
+
+                val currentPosition = holder.adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION && currentPosition == position) {
+
                     holder.displayPage(position, bitmap)
                 }
             }
