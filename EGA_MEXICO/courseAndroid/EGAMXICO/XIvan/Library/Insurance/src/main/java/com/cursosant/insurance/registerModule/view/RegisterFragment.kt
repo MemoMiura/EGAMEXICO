@@ -14,6 +14,7 @@ import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentRegisterBinding
+import com.cursosant.insurance.registerModule.viewModel.RegisterDialogConfig
 import com.cursosant.insurance.registerModule.viewModel.RegisterViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +46,7 @@ open class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private var successDialog: AlertDialog? = null
+    private var messageDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
@@ -74,16 +75,8 @@ open class RegisterFragment : Fragment() {
             vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
                 uiUtils.snackbarWarning(binding.root, resMsg)
             }
-            vm.showSuccessDialog.observe(viewLifecycleOwner) { shouldShow ->
-                if (shouldShow == true) {
-                    showRegisterSuccessDialog()
-                }
-            }
-            vm.navigateToLogin.observe(viewLifecycleOwner) { shouldNavigate ->
-                if (shouldNavigate == true) {
-                    navUtils.run { navController.navigate(actionRegisterToLogin) }
-                    vm.onNavigatedToLogin()
-                }
+            vm.dialogConfig.observe(viewLifecycleOwner) { config ->
+                config?.let { showRegisterDialog(it) }
             }
 
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
@@ -149,8 +142,8 @@ open class RegisterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        successDialog?.dismiss()
-        successDialog = null
+        messageDialog?.dismiss()
+        messageDialog = null
         _binding = null
     }
 
@@ -185,21 +178,22 @@ open class RegisterFragment : Fragment() {
         }
     }
 
-    private fun showRegisterSuccessDialog() {
+    private fun showRegisterDialog(config: RegisterDialogConfig) {
         val currentBinding = _binding ?: return
-        if (successDialog?.isShowing == true) return
+        if (messageDialog?.isShowing == true) return
 
-        successDialog = MaterialAlertDialogBuilder(currentBinding.root.context)
-            .setTitle(R.string.register_success_title)
-            .setMessage(R.string.register_user_created)
+        messageDialog = MaterialAlertDialogBuilder(currentBinding.root.context)
+            .setTitle(config.titleRes)
+            .setMessage(config.messageRes)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
-                currentBinding.viewModel?.onSuccessDialogConsumed()
-                navUtils.run { navController.navigate(actionRegisterToLogin) }
             }
             .setOnDismissListener {
-                currentBinding.viewModel?.onSuccessDialogConsumed()
-                successDialog = null
+                currentBinding.viewModel?.onDialogConsumed()
+                messageDialog = null
+                if (config.navigateToLogin) {
+                    navUtils.run { navController.navigate(actionRegisterToLogin) }
+                }
             }
             .setCancelable(false)
             .show()
