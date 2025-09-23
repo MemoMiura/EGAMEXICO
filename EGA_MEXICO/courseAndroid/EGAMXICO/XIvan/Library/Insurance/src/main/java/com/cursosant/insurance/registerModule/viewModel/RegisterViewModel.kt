@@ -1,5 +1,6 @@
 package com.cursosant.insurance.registerModule.viewModel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cursosant.insurance.R
@@ -31,11 +32,8 @@ class RegisterViewModel @Inject constructor(
     private val _registerResult = MutableLiveData<RegisterResult.Success>()
     val registerResult: LiveData<RegisterResult.Success> = _registerResult
 
-    private val _showSuccessDialog = MutableLiveData<Boolean>()
-    val showSuccessDialog: LiveData<Boolean> = _showSuccessDialog
-
-    private val _navigateToLogin = MutableLiveData<Boolean>()
-    val navigateToLogin: LiveData<Boolean> = _navigateToLogin
+    private val _dialogConfig = MutableLiveData<RegisterDialogConfig?>()
+    val dialogConfig: LiveData<RegisterDialogConfig?> = _dialogConfig
 
     fun register(first: String, last: String, email: String, pass: String) {
         executeAction {
@@ -43,15 +41,31 @@ class RegisterViewModel @Inject constructor(
                 when (result) {
                     is RegisterResult.Success -> {
                         _registerResult.postValue(result)
-                        showWarning(R.string.register_user_created)
-                        _showSuccessDialog.postValue(true)
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.register_success_title,
+                                messageRes = R.string.register_user_created,
+                                navigateToLogin = true
+                            )
+                        )
                     }
                     RegisterResult.AlreadyRegisteredInactive -> {
-                        showWarning(R.string.register_user_exists_inactive)
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.dialog_warning_title,
+                                messageRes = R.string.register_user_exists_inactive,
+                                navigateToLogin = false
+                            )
+                        )
                     }
                     RegisterResult.AlreadyRegisteredActive -> {
-                        showMsg(R.string.register_user_already_active)
-                        _navigateToLogin.postValue(true)
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.dialog_warning_title,
+                                messageRes = R.string.register_user_already_active,
+                                navigateToLogin = true
+                            )
+                        )
                     }
                 }
 
@@ -59,12 +73,14 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    fun onSuccessDialogConsumed() {
-        _showSuccessDialog.value = false
-    }
-
-    fun onNavigatedToLogin() {
-        _navigateToLogin.value = false
+    fun onDialogConsumed() {
+        _dialogConfig.value = null
     }
 
 }
+
+data class RegisterDialogConfig(
+    @StringRes val titleRes: Int,
+    @StringRes val messageRes: Int,
+    val navigateToLogin: Boolean
+)
