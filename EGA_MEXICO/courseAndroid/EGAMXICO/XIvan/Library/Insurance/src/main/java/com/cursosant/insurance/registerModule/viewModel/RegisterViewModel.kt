@@ -37,9 +37,6 @@ class RegisterViewModel @Inject constructor(
     private val _navigateToLogin = MutableLiveData<Boolean>()
     val navigateToLogin: LiveData<Boolean> = _navigateToLogin
 
-    private val _showSuccessDialog = MutableLiveData<Boolean>()
-    val showSuccessDialog: LiveData<Boolean> = _showSuccessDialog
-
     fun register(first: String, last: String, email: String, pass: String) {
         executeAction {
             repository.register(first, last, email, pass) { result ->
