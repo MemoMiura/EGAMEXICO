@@ -43,7 +43,7 @@ class RegisterViewModel @Inject constructor(
                 when (result) {
                     is RegisterResult.Success -> {
                         _registerResult.postValue(result)
-                        showMsg(R.string.register_user_created)
+                        showWarning(R.string.register_user_created)
                         _showSuccessDialog.postValue(true)
                     }
                     RegisterResult.AlreadyRegisteredInactive -> {
