@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true" />
+            android:visibility="gone"
+            app:indicatorSize="40dp"
+            app:trackThickness="4dp"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvLoadingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/policies_loading_more"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:visibility="gone"
+            tools:text="Cargando más pólizas…"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tvErrorMessage"
@@ -21,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="?attr/colorError"
+            android:visibility="gone"
             tools:text="No se pudieron cargar las pólizas" />
 
         <Button
@@ -30,7 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/retry_btn_retry" />
+            android:text="@string/retry_btn_retry"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 </layout>

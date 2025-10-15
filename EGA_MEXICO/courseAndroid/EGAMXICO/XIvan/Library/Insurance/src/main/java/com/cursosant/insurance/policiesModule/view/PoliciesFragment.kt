@@ -63,15 +63,16 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupRecyclerView() {
-        val adapterWithFooter = adapter.withLoadStateFooter(
-            PoliciesLoadStateAdapter { adapter.retry() }
+        val adapterWithLoadState = adapter.withLoadStateHeaderAndFooter(
+            header = PoliciesLoadStateAdapter { adapter.retry() },
+            footer = PoliciesLoadStateAdapter { adapter.retry() }
         )
 
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = adapterWithFooter
-        }.also { adapter.setOnClickListener(this) }
+            adapter = adapterWithLoadState
+        }.also { adapter.setOnClickListener(this@PoliciesFragment) }
     }
 
     private fun setupObservers() {

@@ -36,7 +36,9 @@ class PoliciesLoadStateAdapter(
             val isLoading = loadState is LoadState.Loading
             val isError = loadState is LoadState.Error
 
-            binding.progressBar.isVisible = isLoading
+            binding.progressIndicator.isVisible = isLoading
+            binding.tvLoadingMessage.isVisible = isLoading
+
             binding.btnRetry.isVisible = isError
             binding.tvErrorMessage.isVisible = isError
 
