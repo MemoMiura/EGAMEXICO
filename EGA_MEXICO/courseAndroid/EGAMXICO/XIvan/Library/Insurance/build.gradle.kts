@@ -84,6 +84,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
 
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+
     // Retrofit + OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -93,6 +96,9 @@ dependencies {
     // Firebase Messaging (FCM)
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-messaging-ktx")
+
+    // Google Mobile Ads
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
