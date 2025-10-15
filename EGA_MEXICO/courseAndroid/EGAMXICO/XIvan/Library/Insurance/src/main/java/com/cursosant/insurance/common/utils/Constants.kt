@@ -60,6 +60,8 @@ object Constants {
     const val P_CITY = "city"
     const val P_SUBURB = "suburb"
     const val P_CP = "cp"
+    const val P_PAGE = "page"
+    const val P_PAGE_SIZE = "page_size"
 
     const val H_AUTHORIZATION = "Authorization"
     const val H_BEARER = "Bearer "

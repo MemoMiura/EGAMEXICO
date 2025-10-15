@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.BR
+import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.utils.Constants
@@ -18,6 +23,8 @@ import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,12 +51,13 @@ class PoliciesFragment : Fragment(), OnClickListener{
         setupViewModel()
         setupRecyclerView()
         setupButtons()
+        binding.retryContainer.msg = getString(R.string.policies_empty_msg)
         setupObservers()
     }
 
     private fun setupViewModel() {
         val vm: PoliciesViewModel by viewModels()
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.setVariable(BR.viewModel, vm)
     }
 
@@ -67,13 +75,44 @@ class PoliciesFragment : Fragment(), OnClickListener{
                 utils.snackbarLong(binding.root, resMsg)
             }
             vm.policies.observe(viewLifecycleOwner) { result ->
-                adapter.submitList(result)
+                adapter.submitData(viewLifecycleOwner.lifecycle, result)
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    adapter.loadStateFlow.collectLatest { loadState ->
+                        val refreshState = loadState.refresh
+                        vm.updateLoading(refreshState is LoadState.Loading)
+
+                        if (refreshState is LoadState.Loading) {
+                            vm.setPoliciesEmpty(false)
+                        }
+
+                        val errorState = refreshState as? LoadState.Error
+                            ?: loadState.append as? LoadState.Error
+                            ?: loadState.prepend as? LoadState.Error
+
+                        if (errorState != null) {
+                            if (adapter.itemCount == 0) {
+                                vm.setPoliciesEmpty(true)
+                                binding.retryContainer.msg = getString(R.string.policies_error)
+                            }
+                            vm.notifyPoliciesError()
+                        } else {
+                            val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
+                            vm.setPoliciesEmpty(isListEmpty)
+                            if (isListEmpty) {
+                                binding.retryContainer.msg = getString(R.string.policies_empty_msg)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     private fun setupButtons() {
-        binding.retryContainer.btnRetry.setOnClickListener { getPolicies() }
+        binding.retryContainer.btnRetry.setOnClickListener { adapter.retry() }
     }
 
     override fun onResume() {
