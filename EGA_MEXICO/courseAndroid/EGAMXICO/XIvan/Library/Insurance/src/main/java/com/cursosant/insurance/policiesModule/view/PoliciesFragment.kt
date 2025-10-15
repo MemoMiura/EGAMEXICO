@@ -1,6 +1,8 @@
 package com.cursosant.insurance.policiesModule.view
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.BR
+import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.utils.Constants
@@ -21,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PoliciesFragment : Fragment(), OnClickListener{
+class PoliciesFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentPoliciesBinding? = null
     private val binding get() = _binding!!
@@ -44,7 +47,52 @@ class PoliciesFragment : Fragment(), OnClickListener{
         setupViewModel()
         setupRecyclerView()
         setupButtons()
+        setupAdsIfPresent()
         setupObservers()
+    }
+
+    private fun setupAdsIfPresent() {
+        val adView = binding.root.findViewById<View?>(R.id.adView) ?: return
+        // Access the Google Mobile Ads SDK via reflection so the library can run
+        // even when the dependency is missing from the hosting application.
+        runCatching {
+            initializeAdView(requireContext(), adView)
+        }.onFailure { error ->
+            hideAdView(adView)
+            Log.w(TAG, "Unable to initialize ads for policies screen", error)
+        }
+    }
+
+    private fun initializeAdView(context: Context, adView: View) {
+        val adViewClass = Class.forName("com.google.android.gms.ads.AdView")
+        if (!adViewClass.isInstance(adView)) {
+            throw IllegalStateException(
+                "View bound to @id/adView is not an AdView: ${adView.javaClass.name}"
+            )
+        }
+
+        val mobileAdsClass = Class.forName("com.google.android.gms.ads.MobileAds")
+        runCatching {
+            mobileAdsClass.getMethod("initialize", Context::class.java).invoke(null, context)
+        }.recoverCatching {
+            val listenerClass = Class.forName(
+                "com.google.android.gms.ads.initialization.OnInitializationCompleteListener"
+            )
+            mobileAdsClass
+                .getMethod("initialize", Context::class.java, listenerClass)
+                .invoke(null, context, null)
+        }.getOrThrow()
+
+        val adRequestBuilderClass = Class.forName("com.google.android.gms.ads.AdRequest\$Builder")
+        val builder = adRequestBuilderClass.getDeclaredConstructor().newInstance()
+        val adRequest = adRequestBuilderClass.getMethod("build").invoke(builder)
+
+        val adRequestClass = Class.forName("com.google.android.gms.ads.AdRequest")
+        adViewClass.getMethod("loadAd", adRequestClass).invoke(adView, adRequest)
+    }
+
+    private fun hideAdView(adView: View) {
+        adView.visibility = View.GONE
     }
 
     private fun setupViewModel() {
@@ -106,5 +154,9 @@ class PoliciesFragment : Fragment(), OnClickListener{
             args.putString(Constants.ARG_POLICY_SUBRAMO, policy.subramo)
             navController.navigate(actionPoliciesToPolicyDetail, args)
         }
+    }
+
+    private companion object {
+        private const val TAG = "PoliciesFragment"
     }
 }

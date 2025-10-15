@@ -77,6 +77,7 @@ object Constants {
     const val V_URL_NAME = "grupoasapi"
     const val P_ORGANIZATION = "org"
     const val V_ORGANIZATION = "pruebas"
+    const val P_PAGE = "page"
     //Contact
     const val P_CONTACT_NAME = "from_name"
     const val P_CONTACT_EMAIL = "from_email"
