@@ -2,11 +2,18 @@ package com.cursosant.insurance.policiesModule.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.policiesModule.model.PoliciesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /****
  * Project: Insurance
@@ -24,14 +31,35 @@ import javax.inject.Inject
  ***/
 @HiltViewModel
 class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepository) : BaseViewModel() {
-    private val _policies = MutableLiveData<List<Policy>>()
-    val policies: LiveData<List<Policy>> = _policies
+    private val _policies = MutableLiveData<PagingData<Policy>>()
+    val policies: LiveData<PagingData<Policy>> = _policies
+
+    private val _isPoliciesEmpty = MutableLiveData(false)
+    val isPoliciesEmpty: LiveData<Boolean> = _isPoliciesEmpty
+
+    private var fetchJob: Job? = null
 
     fun getPolicies(token: String) {
-        executeAction {
-            repository.getPolicies(token){ result ->
-                _policies.postValue(result)
-            }
+        fetchJob?.cancel()
+        _isPoliciesEmpty.postValue(false)
+        fetchJob = viewModelScope.launch {
+            repository.getPolicies(token)
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _policies.postValue(pagingData)
+                }
         }
+    }
+
+    fun setPoliciesEmpty(isEmpty: Boolean) {
+        _isPoliciesEmpty.postValue(isEmpty)
+    }
+
+    fun updateLoading(isLoading: Boolean) {
+        setProgress(isLoading)
+    }
+
+    fun notifyPoliciesError() {
+        showMsg(R.string.policies_error)
     }
 }
