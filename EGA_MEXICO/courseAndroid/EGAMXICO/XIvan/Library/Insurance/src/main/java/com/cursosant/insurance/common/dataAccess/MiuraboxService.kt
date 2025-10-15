@@ -22,13 +22,13 @@ import retrofit2.http.Query
 
 interface MiuraboxService {
 
-    @GET(Constants.PATH_POLICIES)
+    @GET(Constants.PATH_POLICIES_PAGINATED)
     suspend fun getPoliciesPageByUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
         @Query("page") page: Int? = null
     ) : PoliciesPage
 
-    @GET(Constants.PATH_POLICIES)
+    @GET(Constants.PATH_POLICIES_PAGINATED)
     suspend fun getPoliciesPaged(
         @Header(Constants.H_AUTHORIZATION) token: String,
         @Query(Constants.P_USERNAME) username: String,
