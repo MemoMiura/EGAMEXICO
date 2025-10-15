@@ -29,7 +29,7 @@ import javax.inject.Inject
  ***/
 class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: DateUtils) :
     PagingDataAdapter<Policy, RecyclerView.ViewHolder>(diff){
-    private lateinit var listener: OnClickListener
+    private var listener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_policy, parent, false))
@@ -56,7 +56,7 @@ class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: Dat
         val binding = DataBindingUtil.bind<ItemPolicyBinding>(view)
 
         fun setListener(policy: Policy) {
-            binding?.root?.setOnClickListener { listener.onClick(policy) }
+            binding?.root?.setOnClickListener { listener?.onClick(policy) }
         }
     }
 }

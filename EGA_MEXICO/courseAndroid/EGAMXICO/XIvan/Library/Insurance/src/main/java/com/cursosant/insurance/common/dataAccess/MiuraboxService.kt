@@ -30,14 +30,6 @@ interface MiuraboxService {
         @Query(Constants.P_PAGE_SIZE) pageSize: Int? = null
     ): PolicyPagedResponse
 
-    @GET(Constants.PATH_POLICIES_PAGINATED)
-    suspend fun getPoliciesPaged(
-        @Header(Constants.H_AUTHORIZATION) token: String,
-        @Query(Constants.P_USERNAME) username: String,
-        @Query(Constants.P_PAGE) page: Int? = null,
-        @Query(Constants.P_PAGE_SIZE) pageSize: Int? = null
-    ): PolicyPagedResponse
-
     @GET(Constants.PATH_POLICIES + "{${Constants.P_USERNAME}}")
     suspend fun getPoliciesInUser(
         @Header(Constants.H_AUTHORIZATION) token: String,

@@ -28,27 +28,16 @@ class DataSource @Inject constructor(private val service: MiuraboxService) {
     ): PolicyPagedResponse {
         val normalizedPage = page.takeIf { it > 0 }
         val normalizedPageSize = pageSize.takeIf { it > 0 }
+        val normalizedUsername = username.trim()
+        if (normalizedUsername.isEmpty()) {
+            return PolicyPagedResponse()
+        }
         return service.getPoliciesPaged(
             token = "${Constants.H_BEARER}$token",
-            username = username,
+            username = normalizedUsername,
             org = Constants.V_ORGANIZATION,
             page = normalizedPage,
             pageSize = normalizedPageSize
-        )
-    }
-
-    suspend fun getPolicies(
-        token: String,
-        username: String,
-        page: Int?,
-        pageSize: Int
-    ): PolicyPagedResponse {
-        val normalizedPageSize = pageSize.takeIf { it > 0 }
-        return service.getPoliciesPaged(
-            "${Constants.H_BEARER}$token",
-            username,
-            page,
-            normalizedPageSize
         )
     }
 }
