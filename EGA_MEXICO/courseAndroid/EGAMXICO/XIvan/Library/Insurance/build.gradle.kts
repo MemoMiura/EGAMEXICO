@@ -97,6 +97,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-messaging-ktx")
 
+    // Google Mobile Ads
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 

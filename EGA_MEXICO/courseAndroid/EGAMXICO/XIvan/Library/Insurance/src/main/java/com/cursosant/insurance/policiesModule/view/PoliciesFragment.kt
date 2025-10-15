@@ -1,6 +1,7 @@
 package com.cursosant.insurance.policiesModule.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.BR
+import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.utils.Constants
@@ -17,6 +19,9 @@ import com.cursosant.insurance.databinding.FragmentPoliciesBinding
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -44,7 +49,23 @@ class PoliciesFragment : Fragment(), OnClickListener{
         setupViewModel()
         setupRecyclerView()
         setupButtons()
+        setupAdsIfPresent()
         setupObservers()
+    }
+
+    private fun setupAdsIfPresent() {
+        runCatching {
+            val adViewId = R.id.adView
+            val adView = binding.root.findViewById<AdView?>(adViewId)
+            if (adView != null) {
+                MobileAds.initialize(requireContext())
+                val adRequest = AdRequest.Builder().build()
+                adView.loadAd(adRequest)
+            }
+        }.onFailure { error ->
+            binding.root.findViewById<View?>(R.id.adView)?.visibility = View.GONE
+            Log.w(TAG, "Unable to initialize ads for policies screen", error)
+        }
     }
 
     private fun setupViewModel() {
@@ -106,5 +127,9 @@ class PoliciesFragment : Fragment(), OnClickListener{
             args.putString(Constants.ARG_POLICY_SUBRAMO, policy.subramo)
             navController.navigate(actionPoliciesToPolicyDetail, args)
         }
+    }
+
+    private companion object {
+        private const val TAG = "PoliciesFragment"
     }
 }
