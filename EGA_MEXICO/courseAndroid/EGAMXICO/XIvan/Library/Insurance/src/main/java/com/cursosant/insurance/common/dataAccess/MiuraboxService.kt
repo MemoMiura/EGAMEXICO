@@ -21,14 +21,14 @@ import retrofit2.http.Query
 
 interface MiuraboxService {
 
-    @GET(Constants.PATH_POLICIES)
+    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES}")
     suspend fun getPoliciesByUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
         @Query(Constants.P_PAGE) page: Int?,
         @Query(Constants.P_PAGE_SIZE) pageSize: Int?
     ) : PolicyPagedResponse
 
-    @GET(Constants.PATH_POLICIES + "{${Constants.P_USERNAME}}")
+    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES}{${Constants.P_USERNAME}}")
     suspend fun getPoliciesInUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
         @Path(Constants.P_USERNAME) username: String
