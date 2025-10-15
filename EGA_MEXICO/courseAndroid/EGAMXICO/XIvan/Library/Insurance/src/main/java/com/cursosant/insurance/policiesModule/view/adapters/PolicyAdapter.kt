@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
@@ -28,7 +28,7 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: DateUtils) :
-    PagingDataAdapter<Policy, RecyclerView.ViewHolder>(diff){
+    ListAdapter<Policy, RecyclerView.ViewHolder>(diff){
     private lateinit var listener: OnClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -36,14 +36,13 @@ class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: Dat
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        getItem(position)?.let { policy ->
-            with(holder as ViewHolder){
-                setListener(policy)
-                binding?.let {
-                    it.setVariable(BR.policy, policy)
-                    it.setVariable(BR.utils, utils)
-                    it.executePendingBindings()
-                }
+        val policy = getItem(position)
+        with(holder as ViewHolder){
+            setListener(policy)
+            binding?.let {
+                it.setVariable(BR.policy, policy)
+                it.setVariable(BR.utils, utils)
+                it.executePendingBindings()
             }
         }
     }

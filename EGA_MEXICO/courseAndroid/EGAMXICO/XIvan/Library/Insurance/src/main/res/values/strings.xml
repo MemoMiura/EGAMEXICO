@@ -176,7 +176,6 @@
     <string name="notifications_title">Notificaciones</string>
     <string name="notifications_error">Error al cargar las notificaciones.</string>
     <string name="notifications_empty_msg">No hay notificaciones</string>
-
     <string name="register_error">El email ya existe.</string>
     <string name="register_success_title">Registro exitoso</string>
     <string name="register_user_created">Usuario creado exitosamente, para inicar sesión le hemos enviado un correo de activación.</string>
@@ -193,7 +192,6 @@
     <string name="insurers_error">No se encontraron aseguradoras.</string>
 
     <string name="policies_error">No se encontraron pólizas</string>
-    <string name="policies_loading_more">Cargando más pólizas…</string>
 
     <string name="policy_detail_btn_share">Compartir</string>
     <string name="policy_detail_btn_edit">Editar</string>
@@ -222,6 +220,7 @@
     <string name="policy_detail_coverage_cap">Tope coaseguro</string>
     <string name="policy_detail_receipt_status">Estado</string>
     <string name="policy_detail_receipt_bonus">Prima</string>
+    <string name="policy_detail_receipt_due_date">Vencimiento</string>
     <string name="policy_detail_title">Detalles de la póliza</string>
     <string name="policy_error">Error al consultar la póliza.</string>
 
@@ -251,6 +250,8 @@
     <string name="login_progress_msg_general">Enviando…</string>
     <string name="policies_progress_msg">Consultando pólizas…</string>
     <string name="policies_empty_msg">No hay pólizas</string>
+    <string name="policies_previous">Anterior</string>
+    <string name="policies_next">Siguiente</string>
     <string name="policy_progress_msg">Consultando póliza…</string>
     <string name="policy_empty_msg">Error al cargar póliza</string>
     <string name="insurers_progress_msg">Consultando pólizas…</string>
