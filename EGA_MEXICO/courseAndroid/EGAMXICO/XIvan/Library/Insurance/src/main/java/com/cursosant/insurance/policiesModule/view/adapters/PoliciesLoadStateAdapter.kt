@@ -41,7 +41,8 @@ class PoliciesLoadStateAdapter(
             binding.tvErrorMessage.isVisible = isError
 
             if (isError) {
-                val errorMessage = loadState.error.localizedMessage
+                val errorState = loadState as? LoadState.Error
+                val errorMessage = errorState?.error?.localizedMessage
                     ?: binding.root.context.getString(R.string.policies_error)
                 binding.tvErrorMessage.text = errorMessage
             }
