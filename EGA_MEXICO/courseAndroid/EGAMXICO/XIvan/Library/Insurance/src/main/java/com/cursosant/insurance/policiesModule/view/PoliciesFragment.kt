@@ -21,6 +21,7 @@ import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentPoliciesBinding
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
+import com.cursosant.insurance.policiesModule.view.adapters.PoliciesLoadStateAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -62,11 +63,16 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupRecyclerView() {
+        val adapterWithLoadState = adapter.withLoadStateHeaderAndFooter(
+            header = PoliciesLoadStateAdapter { adapter.retry() },
+            footer = PoliciesLoadStateAdapter { adapter.retry() }
+        )
+
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = this@PoliciesFragment.adapter
-        }.also { adapter.setOnClickListener(this) }
+            adapter = adapterWithLoadState
+        }.also { adapter.setOnClickListener(this@PoliciesFragment) }
     }
 
     private fun setupObservers() {

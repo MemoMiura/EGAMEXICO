@@ -193,6 +193,7 @@
     <string name="insurers_error">No se encontraron aseguradoras.</string>
 
     <string name="policies_error">No se encontraron pólizas</string>
+    <string name="policies_loading_more">Cargando más pólizas…</string>
 
     <string name="policy_detail_btn_share">Compartir</string>
     <string name="policy_detail_btn_edit">Editar</string>
