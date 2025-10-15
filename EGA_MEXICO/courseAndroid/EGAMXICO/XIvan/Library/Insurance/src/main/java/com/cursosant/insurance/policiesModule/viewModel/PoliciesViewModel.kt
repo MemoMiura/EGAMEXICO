@@ -39,11 +39,11 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
 
     private var fetchJob: Job? = null
 
-    fun getPolicies(token: String) {
+    fun getPolicies(token: String, username: String) {
         fetchJob?.cancel()
         _isPoliciesEmpty.postValue(false)
         fetchJob = viewModelScope.launch {
-            repository.getPolicies(token)
+            repository.getPolicies(token, username)
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
                     _policies.postValue(pagingData)

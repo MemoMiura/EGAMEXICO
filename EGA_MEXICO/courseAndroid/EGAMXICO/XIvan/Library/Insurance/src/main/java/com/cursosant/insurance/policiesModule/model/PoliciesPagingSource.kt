@@ -9,6 +9,7 @@ import com.cursosant.insurance.common.utils.Constants
 class PoliciesPagingSource(
     private val dataSource: DataSource,
     private val token: String,
+    private val username: String,
     private val pageSize: Int
 ) : PagingSource<Int, Policy>() {
 
@@ -22,7 +23,7 @@ class PoliciesPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Policy> {
         val page = params.key ?: FIRST_PAGE
         return try {
-            val response = dataSource.getPolicies(token, page, pageSize)
+            val response = dataSource.getPolicies(token, username, page, pageSize)
             val policies = response.results.orEmpty()
 
             val nextKey = resolveNextKey(response, page, policies.size)

@@ -121,7 +121,9 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun getPolicies() {
-        User.instance?.let { binding.viewModel?.getPolicies(it.token.token) }
+        User.instance?.let { user ->
+            binding.viewModel?.getPolicies(user.token.token, user.username)
+        }
     }
 
     override fun onDestroyView() {
