@@ -2,6 +2,7 @@ package com.cursosant.insurance.common.utils
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.cursosant.insurance.BuildConfig
 
 /****
  * Project: Insurance
@@ -18,11 +19,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
  * www.alainnicolastello.com
  ***/
 object Constants {
-    const val BASE_URL = "https://users-api.miurabox.com/"
+    const val BASE_URL = "https://users-api.miurabox.info/"
 
-    const val BASE_USER_URL = "https://users-api.miurabox.com/"
-    const val BASE_MIURABOX_URL = "https://api.miurabox.com/"
-    const val BASE_MULTI_QUOTE = "https://grupoasapi.multicotizador.com/"
+    const val BASE_USER_URL = "https://users-api.miurabox.info/"
+    const val BASE_MIURABOX_URL = "https://api.miurabox.info/"
+    const val BASE_MULTI_QUOTE = "https://grupoasapi.multicotizador.info/"
 
     const val PATH_LOGIN = "/app-us-login"
     const val PATH_FORGOT_PASSWORD = "/forgot-password"
@@ -32,7 +33,7 @@ object Constants {
     const val PATH_DELETE_ACCOUNT = "/desactivar-usuario-app"
     const val PATH_DISABLE_ACCOUNT = "/desactivar_user_app"
 
-    const val PATH_POLICIES = "/poliza-by-user-app/"
+    const val PATH_POLICIES = "/poliza-by-user-app-paginado/"
     const val PATH_INSURERS = "/provider-by-user-app/"
     const val PATH_POLICY = "/v1/policies-detail-app/"
     const val PATH_DOCUMENTS = "/archivos/editables/"
@@ -60,8 +61,6 @@ object Constants {
     const val P_CITY = "city"
     const val P_SUBURB = "suburb"
     const val P_CP = "cp"
-    const val P_PAGE = "page"
-    const val P_PAGE_SIZE = "page_size"
 
     const val H_AUTHORIZATION = "Authorization"
     const val H_BEARER = "Bearer "

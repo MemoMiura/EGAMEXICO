@@ -6,7 +6,7 @@ import com.cursosant.insurance.common.entities.Insurance
 import com.cursosant.insurance.common.entities.NotificationResponse
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.PolicyDetail
-import com.cursosant.insurance.policiesModule.model.PolicyPagedResponse
+import com.cursosant.insurance.common.entities.PoliciesPage
 import com.cursosant.insurance.common.entities.SinisterResponse
 import com.cursosant.insurance.common.entities.AncoraDocsResponse
 import com.cursosant.insurance.common.entities.BaseResponse
@@ -21,14 +21,13 @@ import retrofit2.http.Query
 
 interface MiuraboxService {
 
-    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES}")
-    suspend fun getPoliciesByUser(
+    @GET(Constants.PATH_POLICIES)
+    suspend fun getPoliciesPageByUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
-        @Query(Constants.P_PAGE) page: Int?,
-        @Query(Constants.P_PAGE_SIZE) pageSize: Int?
-    ) : PolicyPagedResponse
+        @Query("page") page: Int? = null
+    ) : PoliciesPage
 
-    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES}{${Constants.P_USERNAME}}")
+    @GET(Constants.PATH_POLICIES + "{${Constants.P_USERNAME}}")
     suspend fun getPoliciesInUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
         @Path(Constants.P_USERNAME) username: String
