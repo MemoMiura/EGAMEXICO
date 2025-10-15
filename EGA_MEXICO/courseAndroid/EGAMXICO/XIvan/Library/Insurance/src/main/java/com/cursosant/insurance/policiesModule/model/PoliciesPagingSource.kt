@@ -22,11 +22,12 @@ class PoliciesPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Policy> {
         val page = params.key ?: FIRST_PAGE
+        val loadSize = params.loadSize.takeIf { it > 0 } ?: pageSize
         return try {
-            val response = dataSource.getPolicies(token, username, page, pageSize)
-            val policies = response.results.orEmpty()
+            val response = dataSource.getPolicies(token, username, page, loadSize)
+            val policies = response.items
 
-            val nextKey = resolveNextKey(response, page, policies.size)
+            val nextKey = resolveNextKey(response, page, policies.size, loadSize)
             val prevKey = resolvePreviousKey(response, page)
 
             LoadResult.Page(
@@ -42,12 +43,14 @@ class PoliciesPagingSource(
     private fun resolveNextKey(
         response: PolicyPagedResponse,
         currentPage: Int,
-        currentSize: Int
+        currentSize: Int,
+        loadSize: Int
     ): Int? {
         parsePageFromLink(response.next)?.let { return it }
 
         response.count?.let { total ->
-            val totalPages = if (pageSize == 0) 0 else (total + pageSize - 1) / pageSize
+            val effectivePageSize = if (loadSize > 0) loadSize else pageSize
+            val totalPages = if (effectivePageSize == 0) 0 else (total + effectivePageSize - 1) / effectivePageSize
             if (totalPages != 0 && currentPage >= totalPages) {
                 return null
             }

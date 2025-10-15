@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
@@ -28,21 +28,22 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: DateUtils) :
-    ListAdapter<Policy, RecyclerView.ViewHolder>(diff){
-    private lateinit var listener: OnClickListener
+    PagingDataAdapter<Policy, RecyclerView.ViewHolder>(diff){
+    private var listener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_policy, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val policy = getItem(position)
-        with(holder as ViewHolder){
-            setListener(policy)
-            binding?.let {
-                it.setVariable(BR.policy, policy)
-                it.setVariable(BR.utils, utils)
-                it.executePendingBindings()
+        getItem(position)?.let { policy ->
+            with(holder as ViewHolder){
+                setListener(policy)
+                binding?.let {
+                    it.setVariable(BR.policy, policy)
+                    it.setVariable(BR.utils, utils)
+                    it.executePendingBindings()
+                }
             }
         }
     }
@@ -55,7 +56,7 @@ class PolicyAdapter @Inject constructor(diff: PolicyDiff, private val utils: Dat
         val binding = DataBindingUtil.bind<ItemPolicyBinding>(view)
 
         fun setListener(policy: Policy) {
-            binding?.root?.setOnClickListener { listener.onClick(policy) }
+            binding?.root?.setOnClickListener { listener?.onClick(policy) }
         }
     }
 }
