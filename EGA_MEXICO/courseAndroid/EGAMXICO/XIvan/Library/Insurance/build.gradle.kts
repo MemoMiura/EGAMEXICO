@@ -64,6 +64,7 @@ dependencies {
     val hiltVersion = "2.47"
     val navigationVersion = "2.6.0"
     val lifecycleVersion = "2.6.2"
+    val pagingVersion = "3.2.1"
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.24"))
     implementation("androidx.core:core-ktx:$coreKtxVersion")
@@ -83,6 +84,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
 
     // Retrofit + OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
