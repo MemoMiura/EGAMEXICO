@@ -10,5 +10,8 @@ data class PoliciesPage(
     @SerializedName("next") val next: String? = null,
     @SerializedName("previous") val previous: String? = null,
     @SerializedName(value = "policies", alternate = ["results"])
-    val policies: List<Policy> = emptyList()
-)
+    private val rawPolicies: List<Policy>? = null
+) {
+    val policies: List<Policy>
+        get() = rawPolicies.orEmpty()
+}
