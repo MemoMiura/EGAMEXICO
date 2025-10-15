@@ -36,4 +36,19 @@ class DataSource @Inject constructor(private val service: MiuraboxService) {
             pageSize = normalizedPageSize
         )
     }
+
+    suspend fun getPolicies(
+        token: String,
+        username: String,
+        page: Int?,
+        pageSize: Int
+    ): PolicyPagedResponse {
+        val normalizedPageSize = pageSize.takeIf { it > 0 }
+        return service.getPoliciesPaged(
+            "${Constants.H_BEARER}$token",
+            username,
+            page,
+            normalizedPageSize
+        )
+    }
 }
