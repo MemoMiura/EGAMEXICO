@@ -10,5 +10,7 @@ data class PolicyPagedResponse(
     @SerializedName("count") val count: Int? = null,
     @SerializedName("next") val next: String? = null,
     @SerializedName("previous") val previous: String? = null,
-    @SerializedName("results") val results: List<Policy>? = emptyList()
+    @SerializedName(value = "results", alternate = ["policies", "polizas"])
+    val results: List<Policy>? = emptyList(),
+    @SerializedName("page_size") val pageSize: Int? = null
 )

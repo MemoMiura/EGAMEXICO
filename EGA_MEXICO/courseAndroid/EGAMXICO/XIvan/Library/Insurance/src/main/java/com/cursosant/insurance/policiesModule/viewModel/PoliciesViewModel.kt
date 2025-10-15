@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cursosant.insurance.common.entities.InsuranceException
 import com.cursosant.insurance.common.entities.Policy
+import com.cursosant.insurance.common.utils.TypeError
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.policiesModule.model.PoliciesRepository
 import com.cursosant.insurance.policiesModule.model.PolicyPagedResponse
@@ -80,6 +81,10 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
                 _canGoNext.postValue(previousNextState ?: false)
                 _canGoPrevious.postValue(previousPreviousState ?: false)
                 throw exception
+            } catch (throwable: Exception) {
+                _canGoNext.postValue(previousNextState ?: false)
+                _canGoPrevious.postValue(previousPreviousState ?: false)
+                throw InsuranceException(TypeError.POLICIES)
             }
         }
     }
@@ -104,6 +109,7 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
         currentPage = requestedPage
         totalCount = page.count
         val results = page.results.orEmpty()
+        page.pageSize?.takeIf { it > 0 }?.let { pageSize = it }
         if (pageSize == null && results.isNotEmpty()) {
             pageSize = results.size
         }
