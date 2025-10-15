@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cursosant.insurance.common.entities.InsuranceException
-import com.cursosant.insurance.common.entities.PoliciesPage
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.policiesModule.model.PoliciesRepository
+import com.cursosant.insurance.policiesModule.model.PolicyPagedResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -74,7 +74,7 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
         executeAction {
             try {
                 val result = repository.getPolicies(token, page)
-                updatePolicies(result.policies)
+                updatePolicies(result.results.orEmpty())
                 updatePaginationState(result, page)
             } catch (exception: InsuranceException) {
                 _canGoNext.postValue(previousNextState ?: false)
@@ -100,11 +100,12 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
         _policies.postValue(policies)
     }
 
-    private fun updatePaginationState(page: PoliciesPage, requestedPage: Int) {
+    private fun updatePaginationState(page: PolicyPagedResponse, requestedPage: Int) {
         currentPage = requestedPage
         totalCount = page.count
-        if (pageSize == null && page.policies.isNotEmpty()) {
-            pageSize = page.policies.size
+        val results = page.results.orEmpty()
+        if (pageSize == null && results.isNotEmpty()) {
+            pageSize = results.size
         }
 
         nextPage = extractPageNumber(page.next)
@@ -113,7 +114,7 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
         _canGoNext.postValue(nextPage != null)
         _canGoPrevious.postValue(previousPage != null)
 
-        val hasPolicies = page.policies.isNotEmpty()
+        val hasPolicies = results.isNotEmpty()
         val hasCount = hasTotalCount()
         val hasNavigation = nextPage != null || previousPage != null
         val shouldShowIndicator = hasPolicies || hasCount || hasNavigation
