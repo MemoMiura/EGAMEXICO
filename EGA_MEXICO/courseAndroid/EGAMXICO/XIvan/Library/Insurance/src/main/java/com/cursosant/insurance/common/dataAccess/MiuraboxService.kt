@@ -21,9 +21,10 @@ import retrofit2.http.Query
 
 interface MiuraboxService {
 
-    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES}")
+    @GET("${Constants.BASE_MIURABOX_URL}${Constants.PATH_POLICIES_PAGINATED}")
     suspend fun getPoliciesByUser(
         @Header(Constants.H_AUTHORIZATION) token: String,
+        @Query(Constants.P_ORGANIZATION) org: String,
         @Query(Constants.P_PAGE) page: Int?,
         @Query(Constants.P_PAGE_SIZE) pageSize: Int?
     ) : PolicyPagedResponse

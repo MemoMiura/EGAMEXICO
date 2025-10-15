@@ -24,6 +24,7 @@ class DataSource @Inject constructor(private val service: MiuraboxService) {
     suspend fun getPolicies(token: String, page: Int, pageSize: Int): PolicyPagedResponse {
         return service.getPoliciesByUser(
             "${Constants.H_BEARER}$token",
+            Constants.V_ORGANIZATION,
             page,
             pageSize
         )
