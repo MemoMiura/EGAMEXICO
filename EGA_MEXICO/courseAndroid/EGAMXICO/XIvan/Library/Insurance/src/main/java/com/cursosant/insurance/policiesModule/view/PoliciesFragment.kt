@@ -20,6 +20,9 @@ import com.cursosant.insurance.databinding.FragmentPoliciesBinding
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
