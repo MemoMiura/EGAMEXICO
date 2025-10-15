@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,8 +20,10 @@ import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentLoginBinding
+import com.cursosant.insurance.loginModule.viewModel.LoginDialogConfig
 import com.cursosant.insurance.loginModule.viewModel.LoginViewModel
 import com.cursosant.insurance.mainModule.viewModel.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +57,7 @@ open class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private var messageDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -94,6 +98,9 @@ open class LoginFragment : Fragment() {
             }
             vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
                 uiUtils.snackbarWarning(binding.root, resMsg)
+            }
+            vm.dialogConfig.observe(viewLifecycleOwner) { config ->
+                config?.let { showMessageDialog(it) }
             }
             vm.isLogin.observe(viewLifecycleOwner) { result ->
                 if (result) {
@@ -182,6 +189,8 @@ open class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        messageDialog?.dismiss()
+        messageDialog = null
         _binding = null
     }
 
@@ -212,5 +221,26 @@ open class LoginFragment : Fragment() {
             tilPassword.hintTextColor = colorState
             tilPassword.boxStrokeColor = color
         }
+    }
+
+    private fun showMessageDialog(config: LoginDialogConfig) {
+        val currentBinding = _binding ?: return
+        if (messageDialog?.isShowing == true) return
+
+        val builder = MaterialAlertDialogBuilder(currentBinding.root.context)
+            .setTitle(config.titleRes)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setOnDismissListener {
+                currentBinding.viewModel?.onDialogConsumed()
+                messageDialog = null
+            }
+            .setCancelable(false)
+
+        config.messageText?.let { builder.setMessage(it) }
+            ?: config.messageRes?.let { builder.setMessage(it) }
+
+        messageDialog = builder.show()
     }
 }

@@ -1,6 +1,8 @@
 package com.cursosant.insurance.policiesModule.model
 
 import com.cursosant.insurance.common.dataAccess.MiuraboxService
+import com.cursosant.insurance.common.dataAccess.UserService
+import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.utils.Constants
 import javax.inject.Inject
 

@@ -13,11 +13,13 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdfView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pdfRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:isScrollContainer="false" />
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_pdf_page" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabShare"
