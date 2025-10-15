@@ -1,11 +1,11 @@
 package com.cursosant.insurance.policiesModule.model
 
-import com.cursosant.insurance.common.entities.InsuranceException
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.model.BaseRepository
-import com.cursosant.insurance.common.utils.TypeError
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /****
@@ -22,12 +22,18 @@ import javax.inject.Inject
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-class PoliciesRepository @Inject constructor(private val dataSource: DataSource): BaseRepository(){
-    suspend fun getPolicies(token: String, callback: (List<Policy>) -> Unit) =
-        withContext(Dispatchers.IO){
-        executeAction(InsuranceException(TypeError.POLICIES)){
-            val result = dataSource.getPolicies(token)
-            callback(result)
-        }
+class PoliciesRepository @Inject constructor(private val dataSource: DataSource) : BaseRepository() {
+    fun getPolicies(token: String): Flow<PagingData<Policy>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PoliciesPagingSource(dataSource, token, PAGE_SIZE) }
+        ).flow
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

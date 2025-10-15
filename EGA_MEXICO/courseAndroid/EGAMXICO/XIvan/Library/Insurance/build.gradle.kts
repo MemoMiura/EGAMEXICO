@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
 
+    // Paging
+    implementation(libs.androidx.paging.runtime)
+
     // Retrofit + OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -79,7 +82,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // PDF Viewer
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
 
     // javax.inject

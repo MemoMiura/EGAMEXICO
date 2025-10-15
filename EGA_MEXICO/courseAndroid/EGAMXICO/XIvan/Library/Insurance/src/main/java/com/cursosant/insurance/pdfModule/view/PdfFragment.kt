@@ -1,7 +1,9 @@
 package com.cursosant.insurance.pdfModule.view
 
 import android.content.Intent
+import android.graphics.pdf.PdfRenderer
 import android.os.Bundle
+import android.os.ParcelFileDescriptor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.utils.Constants
 import com.cursosant.insurance.common.utils.FileDownloader
 import com.cursosant.insurance.common.utils.TypeError
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentPdfBinding
+import com.cursosant.insurance.pdfModule.view.adapters.PdfPageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 /****
@@ -50,6 +55,10 @@ open class PdfFragment : Fragment(){
     private lateinit var providerDir: String
     private lateinit var pathAppFile: String
 
+    private var parcelFileDescriptor: ParcelFileDescriptor? = null
+    private var pdfRenderer: PdfRenderer? = null
+    private var pdfAdapter: PdfPageAdapter? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPdfBinding.inflate(inflater, container, false)
         return binding.root
@@ -61,6 +70,7 @@ open class PdfFragment : Fragment(){
         setupArguments()
         setupAppBar()
         setupButtons()
+        setupPdfList()
     }
 
     private fun setupArguments() {
@@ -75,6 +85,13 @@ open class PdfFragment : Fragment(){
     private fun setupButtons() {
         binding.fabShare.setOnClickListener {
             shareFile()
+        }
+    }
+
+    private fun setupPdfList() {
+        binding.pdfRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(false)
         }
     }
 
@@ -100,8 +117,6 @@ open class PdfFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        // fixme: change library or make custom pdf loader
-        //binding.viewModel?.downloadPdf(args.url, args.name)
         lifecycleScope.launch {
             val isDownloaded = async { downloadPdf(url, name) }
             if (isDownloaded.await()){
@@ -134,33 +149,77 @@ open class PdfFragment : Fragment(){
     }
 
     private fun setupPDFViewer() {
-        binding.pdfView
-            .fromFile(getPdf())
-            .enableDoubletap(true)
-            .scrollHandle(null)
-            .onError {
-                if (name.endsWith(Constants.SUFFIX_PDF)) {
-                    utils.snackbarShort(binding.root, TypeError.PDF_LOAD.resMsg)
-                } else {
-                    utils.snackbarShort(binding.root, TypeError.PDF_COMPAT.resMsg)
-                }
-            }
-            .load()
-
-        binding.pdfView.apply {
-            maxZoom = 4f
-            midZoom = 2f
-            minZoom = 1f
+        if (!name.endsWith(Constants.SUFFIX_PDF, ignoreCase = true)) {
+            utils.snackbarShort(binding.root, TypeError.PDF_COMPAT.resMsg)
+            return
         }
+
+        val pdfFile = getPdf()
+        if (!pdfFile.exists()) {
+            utils.snackbarShort(binding.root, TypeError.PDF_LOAD.resMsg)
+            return
+        }
+
+        binding.pdfRecyclerView.adapter = null
+        releaseRenderer()
+
+        val descriptor = try {
+            ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+        } catch (e: IOException) {
+            utils.snackbarShort(binding.root, TypeError.PDF_LOAD.resMsg)
+            return
+        }
+
+        val renderer = try {
+            PdfRenderer(descriptor)
+        } catch (e: IOException) {
+            utils.snackbarShort(binding.root, TypeError.PDF_LOAD.resMsg)
+            try {
+                descriptor.close()
+            } catch (_: IOException) {
+            }
+            return
+        }
+
+        parcelFileDescriptor = descriptor
+        pdfRenderer = renderer
+
+        if (renderer.pageCount == 0) {
+            utils.snackbarShort(binding.root, TypeError.PDF_LOAD.resMsg)
+            releaseRenderer()
+            return
+        }
+
+        pdfAdapter = PdfPageAdapter(renderer).also {
+            binding.pdfRecyclerView.adapter = it
+        }
+        binding.pdfRecyclerView.scrollToPosition(0)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        binding.pdfRecyclerView.adapter = null
+        releaseRenderer()
         _binding = null
+        super.onDestroyView()
     }
 
     protected fun setupProvider(dir: String, path: String) {
         providerDir = dir
         pathAppFile = path
+    }
+
+    private fun releaseRenderer() {
+        pdfAdapter?.clear()
+        pdfAdapter = null
+
+        pdfRenderer?.close()
+        pdfRenderer = null
+
+        try {
+            parcelFileDescriptor?.close()
+        } catch (_: IOException) {
+        } finally {
+            parcelFileDescriptor = null
+        }
     }
 }

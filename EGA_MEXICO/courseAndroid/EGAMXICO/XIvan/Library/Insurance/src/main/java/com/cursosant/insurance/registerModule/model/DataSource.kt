@@ -1,6 +1,7 @@
 package com.cursosant.insurance.registerModule.model
 
 import com.cursosant.insurance.common.dataAccess.UserService
+import com.cursosant.insurance.common.entities.BaseResponse
 import com.cursosant.insurance.common.entities.RegisterResponse
 import com.cursosant.insurance.common.utils.Constants
 import javax.inject.Inject
@@ -28,5 +29,11 @@ class DataSource @Inject constructor(private val service: UserService) {
         params[Constants.P_PASSWORD] = password
         params[Constants.P_ORGANIZATION] = Constants.V_ORGANIZATION
         return service.register(params)
+    }
+
+    suspend fun resendActivation(email: String): BaseResponse {
+        val params: MutableMap<String, String> = hashMapOf()
+        params[Constants.P_EMAIL] = email
+        return service.resendActivation(params)
     }
 }

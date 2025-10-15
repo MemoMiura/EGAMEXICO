@@ -29,7 +29,6 @@
         <include
             android:id="@+id/retryContainer"
             layout="@layout/retry_query"
-            app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.policies.size() == 0}"
-            app:msg="@{@string/policies_empty_msg}"/>
+            app:isEmpty="@{viewModel.isPoliciesEmpty}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
