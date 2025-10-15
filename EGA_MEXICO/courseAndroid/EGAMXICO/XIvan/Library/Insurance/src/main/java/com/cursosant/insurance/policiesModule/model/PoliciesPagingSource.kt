@@ -24,8 +24,9 @@ class PoliciesPagingSource(
         return try {
             val response = dataSource.getPolicies(token, page, pageSize)
             val policies = response.results.orEmpty()
+            val reportedPageSize = response.pageSize?.takeIf { it > 0 } ?: pageSize
 
-            val nextKey = resolveNextKey(response, page, policies.size)
+            val nextKey = resolveNextKey(response, page, policies.size, reportedPageSize)
             val prevKey = resolvePreviousKey(response, page)
 
             LoadResult.Page(
@@ -41,12 +42,13 @@ class PoliciesPagingSource(
     private fun resolveNextKey(
         response: PolicyPagedResponse,
         currentPage: Int,
-        currentSize: Int
+        currentSize: Int,
+        effectivePageSize: Int
     ): Int? {
         parsePageFromLink(response.next)?.let { return it }
 
         response.count?.let { total ->
-            val totalPages = if (pageSize == 0) 0 else (total + pageSize - 1) / pageSize
+            val totalPages = if (effectivePageSize <= 0) 0 else (total + effectivePageSize - 1) / effectivePageSize
             if (totalPages != 0 && currentPage >= totalPages) {
                 return null
             }
