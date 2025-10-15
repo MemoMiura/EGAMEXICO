@@ -22,6 +22,14 @@
         \n\nEn cualquier momento Ega México Agente de Seguros y Fianzas, Sociedad Anónima de Capital Variable puede hacer modificaciones o actualizaciones al presente Aviso de Privacidad para la atención de novedades legislativas, políticas internas o nuevos requerimientos para la administración de quejas y reclamaciones de los clientes.\n
 </string>
 
+    <string name="policies">Pólizas</string>
+    <string name="policies_loading_more">Cargando mis pólizas…</string>
+    <string name="policies_error">No se pudieron cargar las pólizas</string>
+    <string name="policies_progress_msg">Consultando pólizas…</string>
+    <string name="policies_empty_msg">No hay pólizas registradas</string>
+    <string name="policies_previous">Anterior</string>
+    <string name="policies_next">Siguiente</string>
+
     <string name="about_description">Broker dedicado a la correduría de seguros y fianzas con vasta experiencia desarrollando programas para mercados empresariales y corporativos desde 1991.
         \n\nNuestro activo más valioso son nuestros clientes satisfechos. Mantenemos una alianza comercial con los grupos aseguradores más importantes de México. Diplomados en Seguros por el IMESFAC y con acreditaciones para operación en todos los ramos. Brindamos servicio a un selecto mercado de clientes de diversas partes de la República y Estados Unidos. Ofrecemos programas de seguros y fianzas específicos y a la medida. Nuestros socios comerciales en conjunto brindan más del 90% de la cobertura del mercado asegurador mexicano. Contamos con más de 20,000 aseguramientos con un equipo profesional y calificado así como más de 20 agentes asociados. Nuestros colaboradores cuentan con cursos de especialización en diversos foros así como en la EGADE del Tec de Monterrey.</string>
 
