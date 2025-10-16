@@ -24,12 +24,22 @@ import javax.inject.Inject
  ***/
 class PoliciesRepository @Inject constructor(private val dataSource: DataSource) : BaseRepository() {
     fun getPolicies(token: String, username: String): Flow<PagingData<Policy>> {
+        val normalizedToken = token.trim()
+        val normalizedUsername = username.trim()
+
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { PoliciesPagingSource(dataSource, token, username, PAGE_SIZE) }
+            pagingSourceFactory = {
+                PoliciesPagingSource(
+                    dataSource = dataSource,
+                    token = normalizedToken,
+                    username = normalizedUsername,
+                    pageSize = PAGE_SIZE
+                )
+            }
         ).flow
     }
 

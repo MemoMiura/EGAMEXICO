@@ -29,13 +29,22 @@ class DataSource @Inject constructor(private val service: MiuraboxService) {
         val normalizedPage = page.takeIf { it > 0 }
         val normalizedPageSize = pageSize.takeIf { it > 0 }
         val normalizedUsername = username.trim()
-        if (normalizedUsername.isEmpty()) {
-            return PolicyPagedResponse()
+        val normalizedToken = token.trim()
+
+        if (normalizedUsername.isEmpty() || normalizedToken.isEmpty()) {
+            return PolicyPagedResponse.EMPTY
         }
+
+        val authHeader = normalizedToken.takeIf {
+            it.startsWith(Constants.H_BEARER, ignoreCase = true)
+        } ?: "${Constants.H_BEARER}$normalizedToken"
+
+        val organization = Constants.V_ORGANIZATION.takeUnless { it.isBlank() }
+
         return service.getPoliciesPaged(
-            token = "${Constants.H_BEARER}$token",
+            token = authHeader,
             username = normalizedUsername,
-            org = Constants.V_ORGANIZATION,
+            org = organization,
             page = normalizedPage,
             pageSize = normalizedPageSize
         )

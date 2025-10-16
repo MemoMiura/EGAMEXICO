@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.utils.Constants
+import kotlinx.coroutines.CancellationException
 
 class PoliciesPagingSource(
     private val dataSource: DataSource,
@@ -36,6 +37,7 @@ class PoliciesPagingSource(
                 nextKey = nextKey
             )
         } catch (exception: Exception) {
+            if (exception is CancellationException) throw exception
             LoadResult.Error(exception)
         }
     }
@@ -48,7 +50,7 @@ class PoliciesPagingSource(
     ): Int? {
         parsePageFromLink(response.next)?.let { return it }
 
-        response.count?.let { total ->
+        response.totalCount.let { total ->
             val effectivePageSize = if (loadSize > 0) loadSize else pageSize
             val totalPages = if (effectivePageSize == 0) 0 else (total + effectivePageSize - 1) / effectivePageSize
             if (totalPages != 0 && currentPage >= totalPages) {

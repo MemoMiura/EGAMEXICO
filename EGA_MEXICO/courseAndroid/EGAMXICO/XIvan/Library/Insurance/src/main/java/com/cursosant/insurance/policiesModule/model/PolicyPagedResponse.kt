@@ -21,4 +21,11 @@ data class PolicyPagedResponse(
             ?: legacyPolicies
             ?: dataPolicies
             ?: emptyList()
+
+    val totalCount: Int
+        get() = count ?: items.size
+
+    companion object {
+        val EMPTY = PolicyPagedResponse()
+    }
 }
