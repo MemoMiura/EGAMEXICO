@@ -19,6 +19,7 @@ import com.cursosant.insurance.common.utils.Constants
 import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentPoliciesBinding
+import com.cursosant.insurance.policiesModule.model.PoliciesPagingSource
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
@@ -28,14 +29,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PoliciesFragment : Fragment(), OnClickListener{
+class PoliciesFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentPoliciesBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: PoliciesViewModel by viewModels()
+
     @Inject lateinit var adapter: PolicyAdapter
     @Inject lateinit var utils: UiUtils
     @Inject lateinit var navUtils: NavUtils
+
+    private var lastKnownPage = PoliciesPagingSource.FIRST_PAGE
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,9 +61,8 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupViewModel() {
-        val vm: PoliciesViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.setVariable(BR.viewModel, vm)
+        binding.setVariable(BR.viewModel, viewModel)
     }
 
     private fun setupRecyclerView() {
@@ -70,22 +74,37 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupObservers() {
-        binding.viewModel?.let { vm ->
-            vm.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
+        viewModel.run {
+            snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
                 utils.snackbarLong(binding.root, resMsg)
             }
-            vm.policies.observe(viewLifecycleOwner) { result ->
+            policies.observe(viewLifecycleOwner) { result ->
                 adapter.submitData(viewLifecycleOwner.lifecycle, result)
+            }
+            paginationState.observe(viewLifecycleOwner) { state ->
+                binding.btnPrevious.isEnabled = state.hasPrevious
+                binding.btnNext.isEnabled = state.hasNext
+                binding.paginationSummary.text = getString(
+                    R.string.policies_pagination_summary,
+                    state.currentPage,
+                    state.totalPages,
+                    state.totalCount
+                )
+
+                if (lastKnownPage != state.currentPage) {
+                    lastKnownPage = state.currentPage
+                    binding.recyclerView.scrollToPosition(0)
+                }
             }
 
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     adapter.loadStateFlow.collectLatest { loadState ->
                         val refreshState = loadState.refresh
-                        vm.updateLoading(refreshState is LoadState.Loading)
+                        updateLoading(refreshState is LoadState.Loading)
 
                         if (refreshState is LoadState.Loading) {
-                            vm.setPoliciesEmpty(false)
+                            setPoliciesEmpty(false)
                         }
 
                         val errorState = refreshState as? LoadState.Error
@@ -94,13 +113,13 @@ class PoliciesFragment : Fragment(), OnClickListener{
 
                         if (errorState != null) {
                             if (adapter.itemCount == 0) {
-                                vm.setPoliciesEmpty(true)
+                                setPoliciesEmpty(true)
                                 binding.retryContainer.msg = getString(R.string.policies_error)
                             }
-                            vm.notifyPoliciesError()
+                            notifyPoliciesError()
                         } else {
                             val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
-                            vm.setPoliciesEmpty(isListEmpty)
+                            setPoliciesEmpty(isListEmpty)
                             if (isListEmpty) {
                                 binding.retryContainer.msg = getString(R.string.policies_empty_msg)
                             }
@@ -113,6 +132,8 @@ class PoliciesFragment : Fragment(), OnClickListener{
 
     private fun setupButtons() {
         binding.retryContainer.btnRetry.setOnClickListener { adapter.retry() }
+        binding.btnPrevious.setOnClickListener { viewModel.goToPreviousPage() }
+        binding.btnNext.setOnClickListener { viewModel.goToNextPage() }
     }
 
     override fun onResume() {
@@ -121,7 +142,7 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun getPolicies() {
-        User.instance?.let { binding.viewModel?.getPolicies(it.token.token) }
+        User.instance?.let { viewModel.getPolicies(it.token.token) }
     }
 
     override fun onDestroyView() {
