@@ -6,10 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
@@ -20,11 +16,8 @@ import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentPoliciesBinding
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
-import com.cursosant.insurance.policiesModule.view.adapters.PoliciesLoadStateAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -63,14 +56,10 @@ class PoliciesFragment : Fragment(), OnClickListener {
     }
 
     private fun setupRecyclerView() {
-        val adapterWithFooter = adapter.withLoadStateFooter(
-            PoliciesLoadStateAdapter { adapter.retry() }
-        )
-
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = adapterWithFooter
+            adapter = this@PoliciesFragment.adapter
         }.also { adapter.setOnClickListener(this) }
     }
 
@@ -81,41 +70,15 @@ class PoliciesFragment : Fragment(), OnClickListener {
         viewModel.policies.observe(viewLifecycleOwner) { result ->
             adapter.submitData(viewLifecycleOwner.lifecycle, result)
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                adapter.loadStateFlow.collectLatest { loadState ->
-                    val refreshState = loadState.refresh
-                    viewModel.updateLoading(refreshState is LoadState.Loading)
-
-                    if (refreshState is LoadState.Loading) {
-                        viewModel.setPoliciesEmpty(false)
-                    }
-
-                    val errorState = refreshState as? LoadState.Error
-                        ?: loadState.append as? LoadState.Error
-                        ?: loadState.prepend as? LoadState.Error
-
-                    if (errorState != null) {
-                        if (adapter.itemCount == 0) {
-                            viewModel.setPoliciesEmpty(true)
-                            binding.retryContainer.msg = getString(R.string.policies_error)
-                        }
-                        viewModel.notifyPoliciesError()
-                    } else {
-                        val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
-                        viewModel.setPoliciesEmpty(isListEmpty)
-                        if (isListEmpty) {
-                            binding.retryContainer.msg = getString(R.string.policies_empty_msg)
-                        }
-                    }
-                }
-            }
+        viewModel.emptyStateMessage.observe(viewLifecycleOwner) { resId ->
+            binding.retryContainer.msg = getString(resId)
         }
     }
 
     private fun setupButtons() {
-        binding.retryContainer.btnRetry.setOnClickListener { adapter.retry() }
+        binding.retryContainer.btnRetry.setOnClickListener {
+            viewModel.refreshCurrentPage()
+        }
     }
 
     override fun onResume() {
@@ -124,9 +87,9 @@ class PoliciesFragment : Fragment(), OnClickListener {
     }
 
     private fun getPolicies() {
-        User.instance?.let { user ->
-            viewModel.getPolicies(user.token.token, user.username)
-        }
+        val user = User.instance
+        viewModel.onSessionAvailable(user?.token?.token, user?.username)
+        viewModel.refreshCurrentPage()
     }
 
     override fun onDestroyView() {
