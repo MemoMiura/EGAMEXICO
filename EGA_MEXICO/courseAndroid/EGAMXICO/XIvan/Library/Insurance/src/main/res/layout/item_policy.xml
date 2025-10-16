@@ -71,7 +71,7 @@
 
                 <include layout="@layout/content_field_policy"
                     app:subtitle="@{@string/quote_result_detail_insurance}"
-                    app:description="@{policy.aseguradora}"/>
+                    app:description="@{policy.aseguradora.alias}"/>
 
                 <include layout="@layout/content_field_policy"
                     app:subtitle="@{@string/quote_result_detail_validity}"
