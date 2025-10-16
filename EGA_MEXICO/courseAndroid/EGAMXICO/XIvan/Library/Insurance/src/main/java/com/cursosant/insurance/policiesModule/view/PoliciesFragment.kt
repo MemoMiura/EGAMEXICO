@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
@@ -29,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PoliciesFragment : Fragment(), OnClickListener{
+class PoliciesFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentPoliciesBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +36,8 @@ class PoliciesFragment : Fragment(), OnClickListener{
     @Inject lateinit var adapter: PolicyAdapter
     @Inject lateinit var utils: UiUtils
     @Inject lateinit var navUtils: NavUtils
+
+    private val viewModel: PoliciesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,9 +58,8 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupViewModel() {
-        val vm: PoliciesViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.setVariable(BR.viewModel, vm)
+        binding.viewModel = viewModel
     }
 
     private fun setupRecyclerView() {
@@ -75,40 +75,38 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupObservers() {
-        binding.viewModel?.let { vm ->
-            vm.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
-                utils.snackbarLong(binding.root, resMsg)
-            }
-            vm.policies.observe(viewLifecycleOwner) { result ->
-                adapter.submitData(viewLifecycleOwner.lifecycle, result)
-            }
+        viewModel.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
+            utils.snackbarLong(binding.root, resMsg)
+        }
+        viewModel.policies.observe(viewLifecycleOwner) { result ->
+            adapter.submitData(viewLifecycleOwner.lifecycle, result)
+        }
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    adapter.loadStateFlow.collectLatest { loadState ->
-                        val refreshState = loadState.refresh
-                        vm.updateLoading(refreshState is LoadState.Loading)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter.loadStateFlow.collectLatest { loadState ->
+                    val refreshState = loadState.refresh
+                    viewModel.updateLoading(refreshState is LoadState.Loading)
 
-                        if (refreshState is LoadState.Loading) {
-                            vm.setPoliciesEmpty(false)
+                    if (refreshState is LoadState.Loading) {
+                        viewModel.setPoliciesEmpty(false)
+                    }
+
+                    val errorState = refreshState as? LoadState.Error
+                        ?: loadState.append as? LoadState.Error
+                        ?: loadState.prepend as? LoadState.Error
+
+                    if (errorState != null) {
+                        if (adapter.itemCount == 0) {
+                            viewModel.setPoliciesEmpty(true)
+                            binding.retryContainer.msg = getString(R.string.policies_error)
                         }
-
-                        val errorState = refreshState as? LoadState.Error
-                            ?: loadState.append as? LoadState.Error
-                            ?: loadState.prepend as? LoadState.Error
-
-                        if (errorState != null) {
-                            if (adapter.itemCount == 0) {
-                                vm.setPoliciesEmpty(true)
-                                binding.retryContainer.msg = getString(R.string.policies_error)
-                            }
-                            vm.notifyPoliciesError()
-                        } else {
-                            val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
-                            vm.setPoliciesEmpty(isListEmpty)
-                            if (isListEmpty) {
-                                binding.retryContainer.msg = getString(R.string.policies_empty_msg)
-                            }
+                        viewModel.notifyPoliciesError()
+                    } else {
+                        val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
+                        viewModel.setPoliciesEmpty(isListEmpty)
+                        if (isListEmpty) {
+                            binding.retryContainer.msg = getString(R.string.policies_empty_msg)
                         }
                     }
                 }
@@ -127,7 +125,7 @@ class PoliciesFragment : Fragment(), OnClickListener{
 
     private fun getPolicies() {
         User.instance?.let { user ->
-            binding.viewModel?.getPolicies(user.token.token, user.username)
+            viewModel.getPolicies(user.token.token, user.username)
         }
     }
 
