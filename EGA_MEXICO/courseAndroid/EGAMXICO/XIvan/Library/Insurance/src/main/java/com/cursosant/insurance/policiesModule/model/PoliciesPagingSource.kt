@@ -6,12 +6,15 @@ import androidx.paging.PagingState
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.utils.Constants
 import java.io.IOException
+import kotlin.math.max
 import retrofit2.HttpException
 
 class PoliciesPagingSource(
     private val dataSource: DataSource,
     private val token: String,
-    private val pageSize: Int
+    private val pageSize: Int,
+    private val manualNavigation: Boolean = false,
+    private val onPageMetadata: (PoliciesPageMetadata) -> Unit = {}
 ) : PagingSource<Int, Policy>() {
 
     /**
@@ -38,10 +41,12 @@ class PoliciesPagingSource(
             val nextKey = resolveNextKey(response, page, policies.size)
             val prevKey = resolvePreviousKey(response, page)
 
+            notifyMetadata(response, page)
+
             LoadResult.Page(
                 data = policies,
-                prevKey = prevKey,
-                nextKey = nextKey
+                prevKey = if (manualNavigation) null else prevKey,
+                nextKey = if (manualNavigation) null else nextKey
             )
         } catch (ioException: IOException) {
             // Errores de red (sin conexión, timeouts, etc.).
@@ -84,7 +89,35 @@ class PoliciesPagingSource(
         }.getOrNull()
     }
 
+    /**
+     * Informa a la capa superior sobre el estado de la página actual (totales y enlaces).
+     */
+    private fun notifyMetadata(
+        response: PolicyPagedResponse,
+        currentPage: Int
+    ) {
+        val totalCount = response.count ?: 0
+        val totalPages = calculateTotalPages(totalCount)
+        val hasNext = !response.next.isNullOrBlank()
+        val hasPrevious = !response.previous.isNullOrBlank() || currentPage > FIRST_PAGE
+
+        onPageMetadata(
+            PoliciesPageMetadata(
+                currentPage = currentPage,
+                totalPages = totalPages,
+                totalCount = totalCount,
+                hasPrevious = hasPrevious,
+                hasNext = hasNext
+            )
+        )
+    }
+
+    private fun calculateTotalPages(totalCount: Int): Int {
+        if (pageSize <= 0) return FIRST_PAGE
+        return max(FIRST_PAGE, (totalCount + pageSize - 1) / pageSize)
+    }
+
     companion object {
-        private const val FIRST_PAGE = 1
+        const val FIRST_PAGE = 1
     }
 }

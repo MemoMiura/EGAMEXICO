@@ -193,6 +193,10 @@
     <string name="insurers_error">No se encontraron aseguradoras.</string>
 
     <string name="policies_error">No se encontraron pólizas</string>
+    <string name="policies_pagination_previous">Anterior</string>
+    <string name="policies_pagination_next">Siguiente</string>
+    <string name="policies_pagination_summary">Página %1$d de %2$d · %3$d pólizas</string>
+    <string name="policies_pagination_summary_placeholder">Página 1 de 1 · 0 pólizas</string>
 
     <string name="policy_detail_btn_share">Compartir</string>
     <string name="policy_detail_btn_edit">Editar</string>
