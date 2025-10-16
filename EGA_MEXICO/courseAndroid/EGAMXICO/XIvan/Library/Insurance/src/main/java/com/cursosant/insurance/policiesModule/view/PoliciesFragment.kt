@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cursosant.insurance.BR
+import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.utils.Constants
@@ -16,8 +21,11 @@ import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.databinding.FragmentPoliciesBinding
 import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
+import com.cursosant.insurance.policiesModule.view.adapters.PoliciesLoadStateAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,6 +52,7 @@ class PoliciesFragment : Fragment(), OnClickListener{
         setupViewModel()
         setupRecyclerView()
         setupButtons()
+        binding.retryContainer.msg = getString(R.string.policies_empty_msg)
         setupObservers()
     }
 
@@ -54,10 +63,14 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupRecyclerView() {
+        val adapterWithFooter = adapter.withLoadStateFooter(
+            PoliciesLoadStateAdapter { adapter.retry() }
+        )
+
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = this@PoliciesFragment.adapter
+            adapter = adapterWithFooter
         }.also { adapter.setOnClickListener(this) }
     }
 
@@ -67,15 +80,44 @@ class PoliciesFragment : Fragment(), OnClickListener{
                 utils.snackbarLong(binding.root, resMsg)
             }
             vm.policies.observe(viewLifecycleOwner) { result ->
-                adapter.submitList(result)
+                adapter.submitData(viewLifecycleOwner.lifecycle, result)
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    adapter.loadStateFlow.collectLatest { loadState ->
+                        val refreshState = loadState.refresh
+                        vm.updateLoading(refreshState is LoadState.Loading)
+
+                        if (refreshState is LoadState.Loading) {
+                            vm.setPoliciesEmpty(false)
+                        }
+
+                        val errorState = refreshState as? LoadState.Error
+                            ?: loadState.append as? LoadState.Error
+                            ?: loadState.prepend as? LoadState.Error
+
+                        if (errorState != null) {
+                            if (adapter.itemCount == 0) {
+                                vm.setPoliciesEmpty(true)
+                                binding.retryContainer.msg = getString(R.string.policies_error)
+                            }
+                            vm.notifyPoliciesError()
+                        } else {
+                            val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
+                            vm.setPoliciesEmpty(isListEmpty)
+                            if (isListEmpty) {
+                                binding.retryContainer.msg = getString(R.string.policies_empty_msg)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     private fun setupButtons() {
-        binding.retryContainer.btnRetry.setOnClickListener { getPolicies() }
-        binding.btnNext.setOnClickListener { binding.viewModel?.loadNextPage() }
-        binding.btnPrevious.setOnClickListener { binding.viewModel?.loadPreviousPage() }
+        binding.retryContainer.btnRetry.setOnClickListener { adapter.retry() }
     }
 
     override fun onResume() {
@@ -84,7 +126,9 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun getPolicies() {
-        User.instance?.let { binding.viewModel?.loadFirstPage(it.token.token) }
+        User.instance?.let { user ->
+            binding.viewModel?.getPolicies(user.token.token, user.username)
+        }
     }
 
     override fun onDestroyView() {

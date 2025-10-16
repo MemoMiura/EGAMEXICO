@@ -33,7 +33,8 @@ object Constants {
     const val PATH_DELETE_ACCOUNT = "/desactivar-usuario-app"
     const val PATH_DISABLE_ACCOUNT = "/desactivar_user_app"
 
-    const val PATH_POLICIES = "/poliza-by-user-app-paginado/"
+    const val PATH_POLICIES = "/poliza-by-user-app/"
+    const val PATH_POLICIES_PAGINATED = "/poliza-by-user-app-paginado/"
     const val PATH_INSURERS = "/provider-by-user-app/"
     const val PATH_POLICY = "/v1/policies-detail-app/"
     const val PATH_DOCUMENTS = "/archivos/editables/"
@@ -77,6 +78,8 @@ object Constants {
     const val V_URL_NAME = "grupoasapi"
     const val P_ORGANIZATION = "org"
     const val V_ORGANIZATION = "pruebas"
+    const val P_PAGE = "page"
+    const val P_PAGE_SIZE = "page_size"
     //Contact
     const val P_CONTACT_NAME = "from_name"
     const val P_CONTACT_EMAIL = "from_email"

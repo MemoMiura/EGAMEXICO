@@ -1,11 +1,11 @@
 package com.cursosant.insurance.policiesModule.model
 
-import com.cursosant.insurance.common.entities.InsuranceException
-import com.cursosant.insurance.common.entities.PoliciesPage
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.model.BaseRepository
-import com.cursosant.insurance.common.utils.TypeError
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /****
@@ -23,10 +23,27 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 class PoliciesRepository @Inject constructor(private val dataSource: DataSource) : BaseRepository() {
-    suspend fun getPolicies(token: String, page: Int?): PoliciesPage =
-        withContext(Dispatchers.IO) {
-            executeAction<PoliciesPage>(InsuranceException(TypeError.POLICIES)) {
-                dataSource.getPoliciesPage(token, page)
+    fun getPolicies(token: String, username: String): Flow<PagingData<Policy>> {
+        val normalizedToken = token.trim()
+        val normalizedUsername = username.trim()
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PoliciesPagingSource(
+                    dataSource = dataSource,
+                    token = normalizedToken,
+                    username = normalizedUsername,
+                    pageSize = PAGE_SIZE
+                )
             }
-        }
+        ).flow
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
 }
