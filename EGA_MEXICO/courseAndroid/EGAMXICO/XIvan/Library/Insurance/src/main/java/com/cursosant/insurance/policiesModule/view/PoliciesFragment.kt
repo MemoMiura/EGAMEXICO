@@ -30,6 +30,15 @@ class PoliciesFragment : Fragment(R.layout.fragment_policies), OnClickListener {
 
     private val viewModel: PoliciesViewModel by viewModels()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentPoliciesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentPoliciesBinding.bind(view)
@@ -49,8 +58,8 @@ class PoliciesFragment : Fragment(R.layout.fragment_policies), OnClickListener {
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = this@PoliciesFragment.adapter
-        }.also { adapter.setOnClickListener(this) }
+            adapter = adapterWithFooter
+        }.also { adapter.setOnClickListener(this@PoliciesFragment) }
     }
 
     private fun setupObservers() {
@@ -91,10 +100,6 @@ class PoliciesFragment : Fragment(R.layout.fragment_policies), OnClickListener {
     * OnClickListener
     * */
     override fun onClick(policy: Policy) {
-        /*val navController = requireActivity().findNavController(R.id.nav_host_fragment_content_main)
-        val action = PoliciesFragmentDirections.actionPoliciesToPolicyDetail()
-        action.idPolicy = policy.id
-        navController.navigate(action)*/
         navUtils.run {
             val args = Bundle()
             args.putLong(Constants.ARG_ID, policy.id)
