@@ -2,6 +2,7 @@ package com.cursosant.insurance.common.utils
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.cursosant.insurance.BuildConfig
 
 /****
  * Project: Insurance
@@ -33,6 +34,7 @@ object Constants {
     const val PATH_DISABLE_ACCOUNT = "/desactivar_user_app"
 
     const val PATH_POLICIES = "/poliza-by-user-app/"
+    const val PATH_POLICIES_PAGINATED = "/poliza-by-user-app-paginado/"
     const val PATH_INSURERS = "/provider-by-user-app/"
     const val PATH_POLICY = "/v1/policies-detail-app/"
     const val PATH_DOCUMENTS = "/archivos/editables/"
@@ -60,8 +62,6 @@ object Constants {
     const val P_CITY = "city"
     const val P_SUBURB = "suburb"
     const val P_CP = "cp"
-    const val P_PAGE = "page"
-    const val P_PAGE_SIZE = "page_size"
 
     const val H_AUTHORIZATION = "Authorization"
     const val H_BEARER = "Bearer "
@@ -78,6 +78,8 @@ object Constants {
     const val V_URL_NAME = "grupoasapi"
     const val P_ORGANIZATION = "org"
     const val V_ORGANIZATION = "pruebas"
+    const val P_PAGE = "page"
+    const val P_PAGE_SIZE = "page_size"
     //Contact
     const val P_CONTACT_NAME = "from_name"
     const val P_CONTACT_EMAIL = "from_email"

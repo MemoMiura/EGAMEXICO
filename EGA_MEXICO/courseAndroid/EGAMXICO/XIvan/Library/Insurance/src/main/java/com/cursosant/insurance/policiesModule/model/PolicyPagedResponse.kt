@@ -10,5 +10,22 @@ data class PolicyPagedResponse(
     @SerializedName("count") val count: Int? = null,
     @SerializedName("next") val next: String? = null,
     @SerializedName("previous") val previous: String? = null,
-    @SerializedName("results") val results: List<Policy>? = emptyList()
-)
+    @SerializedName("results") private val results: List<Policy>? = null,
+    @SerializedName("policies") private val policies: List<Policy>? = null,
+    @SerializedName("polizas") private val legacyPolicies: List<Policy>? = null,
+    @SerializedName("data") private val dataPolicies: List<Policy>? = null
+) {
+    val items: List<Policy>
+        get() = results
+            ?: policies
+            ?: legacyPolicies
+            ?: dataPolicies
+            ?: emptyList()
+
+    val totalCount: Int
+        get() = count ?: items.size
+
+    companion object {
+        val EMPTY = PolicyPagedResponse()
+    }
+}

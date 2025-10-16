@@ -1,8 +1,6 @@
 package com.cursosant.insurance.policiesModule.model
 
 import com.cursosant.insurance.common.dataAccess.MiuraboxService
-import com.cursosant.insurance.common.dataAccess.UserService
-import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.utils.Constants
 import javax.inject.Inject
 
@@ -21,11 +19,34 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 class DataSource @Inject constructor(private val service: MiuraboxService) {
-    suspend fun getPolicies(token: String, page: Int, pageSize: Int): PolicyPagedResponse {
-        return service.getPoliciesByUser(
-            "${Constants.H_BEARER}$token",
-            page,
-            pageSize
+
+    suspend fun getPolicies(
+        token: String,
+        username: String,
+        page: Int,
+        pageSize: Int
+    ): PolicyPagedResponse {
+        val normalizedPage = page.takeIf { it > 0 }
+        val normalizedPageSize = pageSize.takeIf { it > 0 }
+        val normalizedUsername = username.trim()
+        val normalizedToken = token.trim()
+
+        if (normalizedUsername.isEmpty() || normalizedToken.isEmpty()) {
+            return PolicyPagedResponse.EMPTY
+        }
+
+        val authHeader = normalizedToken.takeIf {
+            it.startsWith(Constants.H_BEARER, ignoreCase = true)
+        } ?: "${Constants.H_BEARER}$normalizedToken"
+
+        val organization = Constants.V_ORGANIZATION.takeUnless { it.isBlank() }
+
+        return service.getPoliciesPaged(
+            token = authHeader,
+            username = normalizedUsername,
+            org = organization,
+            page = normalizedPage,
+            pageSize = normalizedPageSize
         )
     }
 }

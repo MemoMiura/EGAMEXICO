@@ -3,14 +3,14 @@ package com.cursosant.insurance.loginModule.viewModel
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.loginModule.model.LoginRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: LoginRepository
 ) : BaseViewModel() {
@@ -98,6 +98,20 @@ class LoginViewModel @Inject constructor(
 
     fun onDialogConsumed() {
         _dialogConfig.value = null
+    }
+
+    companion object {
+        fun provideFactory(
+            repository: LoginRepository
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+                    @Suppress("UNCHECKED_CAST")
+                    return LoginViewModel(repository) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class: ${'$'}modelClass")
+            }
+        }
     }
 }
 

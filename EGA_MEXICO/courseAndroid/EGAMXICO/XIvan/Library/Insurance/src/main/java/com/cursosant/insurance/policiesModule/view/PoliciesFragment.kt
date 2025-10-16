@@ -1,17 +1,10 @@
 package com.cursosant.insurance.policiesModule.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.Policy
 import com.cursosant.insurance.common.entities.User
@@ -23,12 +16,10 @@ import com.cursosant.insurance.policiesModule.view.adapters.OnClickListener
 import com.cursosant.insurance.policiesModule.view.adapters.PolicyAdapter
 import com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PoliciesFragment : Fragment(), OnClickListener{
+class PoliciesFragment : Fragment(R.layout.fragment_policies), OnClickListener {
 
     private var _binding: FragmentPoliciesBinding? = null
     private val binding get() = _binding!!
@@ -37,10 +28,12 @@ class PoliciesFragment : Fragment(), OnClickListener{
     @Inject lateinit var utils: UiUtils
     @Inject lateinit var navUtils: NavUtils
 
+    private val viewModel: PoliciesViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPoliciesBinding.inflate(inflater, container, false)
         return binding.root
@@ -48,6 +41,7 @@ class PoliciesFragment : Fragment(), OnClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentPoliciesBinding.bind(view)
         setupViewModel()
         setupRecyclerView()
         setupButtons()
@@ -56,63 +50,34 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun setupViewModel() {
-        val vm: PoliciesViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.setVariable(BR.viewModel, vm)
+        binding.viewModel = viewModel
     }
 
     private fun setupRecyclerView() {
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = this@PoliciesFragment.adapter
-        }.also { adapter.setOnClickListener(this) }
+            adapter = adapterWithFooter
+        }.also { adapter.setOnClickListener(this@PoliciesFragment) }
     }
 
     private fun setupObservers() {
-        binding.viewModel?.let { vm ->
-            vm.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
-                utils.snackbarLong(binding.root, resMsg)
-            }
-            vm.policies.observe(viewLifecycleOwner) { result ->
-                adapter.submitData(viewLifecycleOwner.lifecycle, result)
-            }
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    adapter.loadStateFlow.collectLatest { loadState ->
-                        val refreshState = loadState.refresh
-                        vm.updateLoading(refreshState is LoadState.Loading)
-
-                        if (refreshState is LoadState.Loading) {
-                            vm.setPoliciesEmpty(false)
-                        }
-
-                        val errorState = refreshState as? LoadState.Error
-                            ?: loadState.append as? LoadState.Error
-                            ?: loadState.prepend as? LoadState.Error
-
-                        if (errorState != null) {
-                            if (adapter.itemCount == 0) {
-                                vm.setPoliciesEmpty(true)
-                                binding.retryContainer.msg = getString(R.string.policies_error)
-                            }
-                            vm.notifyPoliciesError()
-                        } else {
-                            val isListEmpty = refreshState is LoadState.NotLoading && adapter.itemCount == 0
-                            vm.setPoliciesEmpty(isListEmpty)
-                            if (isListEmpty) {
-                                binding.retryContainer.msg = getString(R.string.policies_empty_msg)
-                            }
-                        }
-                    }
-                }
-            }
+        viewModel.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
+            utils.snackbarLong(binding.root, resMsg)
+        }
+        viewModel.policies.observe(viewLifecycleOwner) { result ->
+            adapter.submitData(viewLifecycleOwner.lifecycle, result)
+        }
+        viewModel.emptyStateMessage.observe(viewLifecycleOwner) { resId ->
+            binding.retryContainer.msg = getString(resId)
         }
     }
 
     private fun setupButtons() {
-        binding.retryContainer.btnRetry.setOnClickListener { adapter.retry() }
+        binding.retryContainer.btnRetry.setOnClickListener {
+            viewModel.refreshCurrentPage()
+        }
     }
 
     override fun onResume() {
@@ -121,7 +86,9 @@ class PoliciesFragment : Fragment(), OnClickListener{
     }
 
     private fun getPolicies() {
-        User.instance?.let { binding.viewModel?.getPolicies(it.token.token) }
+        val user = User.instance
+        viewModel.onSessionAvailable(user?.token?.token, user?.username)
+        viewModel.refreshCurrentPage()
     }
 
     override fun onDestroyView() {
@@ -133,10 +100,6 @@ class PoliciesFragment : Fragment(), OnClickListener{
     * OnClickListener
     * */
     override fun onClick(policy: Policy) {
-        /*val navController = requireActivity().findNavController(R.id.nav_host_fragment_content_main)
-        val action = PoliciesFragmentDirections.actionPoliciesToPolicyDetail()
-        action.idPolicy = policy.id
-        navController.navigate(action)*/
         navUtils.run {
             val args = Bundle()
             args.putLong(Constants.ARG_ID, policy.id)

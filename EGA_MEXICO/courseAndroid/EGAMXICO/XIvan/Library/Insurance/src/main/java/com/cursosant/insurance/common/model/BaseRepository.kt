@@ -18,10 +18,10 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 open class BaseRepository @Inject constructor() {
-    suspend fun executeAction(exception: InsuranceException, block: suspend () -> Unit) {
-        try {
+    suspend fun <T> executeAction(exception: InsuranceException, block: suspend () -> T): T {
+        return try {
             block()
-        } catch (e: Exception){
+        } catch (e: Exception) {
             throw exception
         }
     }

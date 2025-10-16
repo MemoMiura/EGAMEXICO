@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.cursosant.insurance.BR
 import com.cursosant.insurance.R
 import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.entities.UserData
@@ -20,6 +19,7 @@ import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentLoginBinding
+import com.cursosant.insurance.loginModule.model.LoginRepository
 import com.cursosant.insurance.loginModule.viewModel.LoginDialogConfig
 import com.cursosant.insurance.loginModule.viewModel.LoginViewModel
 import com.cursosant.insurance.mainModule.viewModel.MainViewModel
@@ -50,6 +50,7 @@ open class LoginFragment : Fragment() {
     @Inject lateinit var uiUtils: UiUtils
     @Inject lateinit var utils: Utils
     @Inject lateinit var navUtils: NavUtils
+    @Inject lateinit var loginRepository: LoginRepository
 
     private var gson: Gson? = null
     var gsonBuilder = GsonBuilder()
@@ -58,6 +59,9 @@ open class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private var messageDialog: AlertDialog? = null
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModel.provideFactory(loginRepository)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -76,50 +80,48 @@ open class LoginFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val vm: LoginViewModel by viewModels()
-        binding.lifecycleOwner = this
-        binding.setVariable(BR.viewModel, vm)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
     }
 
     private fun setupObservers() {
-        binding.viewModel?.let { vm ->
-            vm.initialSetupEvent.observe(viewLifecycleOwner) { event ->
-                binding.containerForm.visibility = View.VISIBLE
-                event?.let {
-                    binding.etUsername.setText(it.email)
-                    binding.etPassword.setText(it.password)
-                }
+        val vm = viewModel
+        vm.initialSetupEvent.observe(viewLifecycleOwner) { event ->
+            binding.containerForm.visibility = View.VISIBLE
+            event?.let {
+                binding.etUsername.setText(it.email)
+                binding.etPassword.setText(it.password)
             }
-            vm.inProgress.observe(viewLifecycleOwner) { result ->
-                binding.containerForm.visibility = if (result) View.GONE else View.VISIBLE
+        }
+        vm.inProgress.observe(viewLifecycleOwner) { result ->
+            binding.containerForm.visibility = if (result) View.GONE else View.VISIBLE
+        }
+        vm.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
+            uiUtils.snackbarLong(binding.root, resMsg)
+        }
+        vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
+            uiUtils.snackbarWarning(binding.root, resMsg)
+        }
+        vm.dialogConfig.observe(viewLifecycleOwner) { config ->
+            config?.let { showMessageDialog(it) }
+        }
+        vm.isLogin.observe(viewLifecycleOwner) { result ->
+            if (result) {
+                goToHome()
+                User.instance?.let { vm.setupTopics(it.username) }
+                val mainVM: MainViewModel by activityViewModels()
+                mainVM.loginFinished()
             }
-            vm.snackbarMsg.observe(viewLifecycleOwner) { resMsg ->
-                uiUtils.snackbarLong(binding.root, resMsg)
-            }
-            vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
-                uiUtils.snackbarWarning(binding.root, resMsg)
-            }
-            vm.dialogConfig.observe(viewLifecycleOwner) { config ->
-                config?.let { showMessageDialog(it) }
-            }
-            vm.isLogin.observe(viewLifecycleOwner) { result ->
-                if (result) {
-                    goToHome()
-                    User.instance?.let { vm.setupTopics(it.username) }
-                    val mainVM: MainViewModel by activityViewModels()
-                    mainVM.loginFinished()
-                }
-            }
-            vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
-                if (isHide) uiUtils.hideKeyboard(binding.root)
-            }
+        }
+        vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
+            if (isHide) uiUtils.hideKeyboard(binding.root)
         }
     }
 
     // FIXME: if auto-login fails, show retry option or fill form
     private fun login(email: String, password: String) {
         val msg = getString(R.string.login_progress_msg_login)
-        binding.viewModel?.login(email, password, msg)
+        viewModel.login(email, password, msg)
     }
 
     private fun goToHome() {
@@ -155,11 +157,17 @@ open class LoginFragment : Fragment() {
             }
             btnForgot.setOnClickListener {
                 val msg = getString(R.string.login_progress_msg_general)
-                if (validateFields()) viewModel?.forgotPassword(etUsername.text.toString().trim(), msg)
+                if (validateFields()) this@LoginFragment.viewModel.forgotPassword(
+                    etUsername.text.toString().trim(),
+                    msg
+                )
             }
             btnSendCode.setOnClickListener {
                 val msg = getString(R.string.login_progress_msg_general)
-                if (validateFields()) viewModel?.resendActivation(etUsername.text.toString().trim(), msg)
+                if (validateFields()) this@LoginFragment.viewModel.resendActivation(
+                    etUsername.text.toString().trim(),
+                    msg
+                )
             }
         }
     }

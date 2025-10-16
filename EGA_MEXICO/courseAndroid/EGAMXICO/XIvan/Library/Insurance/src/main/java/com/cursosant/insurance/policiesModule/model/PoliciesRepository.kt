@@ -1,12 +1,11 @@
 package com.cursosant.insurance.policiesModule.model
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.cursosant.insurance.common.entities.Policy
+import com.cursosant.insurance.common.entities.InsuranceException
 import com.cursosant.insurance.common.model.BaseRepository
-import kotlinx.coroutines.flow.Flow
+import com.cursosant.insurance.common.utils.TypeError
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /****
  * Project: Insurance
@@ -22,15 +21,34 @@ import javax.inject.Inject
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-class PoliciesRepository @Inject constructor(private val dataSource: DataSource) : BaseRepository() {
-    fun getPolicies(token: String): Flow<PagingData<Policy>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { PoliciesPagingSource(dataSource, token, PAGE_SIZE) }
-        ).flow
+class PoliciesRepository @Inject constructor(
+    private val pagingSource: PoliciesPagingSource
+) : BaseRepository() {
+
+    suspend fun getPoliciesPage(
+        token: String,
+        username: String,
+        page: Int
+    ): PolicyPagedResponse {
+        val normalizedToken = token.trim()
+        val normalizedUsername = username.trim()
+
+        if (normalizedToken.isEmpty() || normalizedUsername.isEmpty()) {
+            return PolicyPagedResponse.EMPTY
+        }
+
+        val exception = InsuranceException(TypeError.POLICIES)
+
+        return withContext(Dispatchers.IO) {
+            executeAction(exception) {
+                pagingSource.load(
+                    token = normalizedToken,
+                    username = normalizedUsername,
+                    page = page,
+                    pageSize = PAGE_SIZE
+                )
+            }
+        }
     }
 
     companion object {
