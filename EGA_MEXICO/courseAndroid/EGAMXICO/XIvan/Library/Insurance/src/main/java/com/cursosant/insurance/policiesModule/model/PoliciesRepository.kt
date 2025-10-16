@@ -23,6 +23,11 @@ import javax.inject.Inject
  * www.alainnicolastello.com
  ***/
 class PoliciesRepository @Inject constructor(private val dataSource: DataSource) : BaseRepository() {
+    /**
+     * Expone un [Flow] de [PagingData] para consumir las pólizas de forma paginada.
+     *
+     * @param token Token de autenticación con prefijo "Bearer" listo para ser enviado en el header.
+     */
     fun getPolicies(token: String): Flow<PagingData<Policy>> {
         return Pager(
             config = PagingConfig(

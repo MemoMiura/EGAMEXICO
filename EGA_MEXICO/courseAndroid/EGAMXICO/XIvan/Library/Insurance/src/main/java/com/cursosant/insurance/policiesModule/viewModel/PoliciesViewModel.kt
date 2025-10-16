@@ -39,6 +39,11 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
 
     private var fetchJob: Job? = null
 
+    /**
+     * Inicia la carga paginada de pólizas. El resultado se expone como [LiveData]
+     * para que el fragmento lo observe y envíe cada página al adapter mediante
+     * `adapter.submitData(lifecycle, data)`.
+     */
     fun getPolicies(token: String) {
         fetchJob?.cancel()
         _isPoliciesEmpty.postValue(false)
@@ -46,6 +51,7 @@ class PoliciesViewModel @Inject constructor(private val repository: PoliciesRepo
             repository.getPolicies(token)
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
+                    // Cada nuevo PagingData se notifica a la UI para mantener el listado actualizado.
                     _policies.postValue(pagingData)
                 }
         }
