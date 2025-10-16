@@ -19,6 +19,7 @@ import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentLoginBinding
+import com.cursosant.insurance.loginModule.model.LoginRepository
 import com.cursosant.insurance.loginModule.viewModel.LoginDialogConfig
 import com.cursosant.insurance.loginModule.viewModel.LoginViewModel
 import com.cursosant.insurance.mainModule.viewModel.MainViewModel
@@ -49,6 +50,7 @@ open class LoginFragment : Fragment() {
     @Inject lateinit var uiUtils: UiUtils
     @Inject lateinit var utils: Utils
     @Inject lateinit var navUtils: NavUtils
+    @Inject lateinit var loginRepository: LoginRepository
 
     private var gson: Gson? = null
     var gsonBuilder = GsonBuilder()
@@ -57,7 +59,9 @@ open class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private var messageDialog: AlertDialog? = null
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModel.provideFactory(loginRepository)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
