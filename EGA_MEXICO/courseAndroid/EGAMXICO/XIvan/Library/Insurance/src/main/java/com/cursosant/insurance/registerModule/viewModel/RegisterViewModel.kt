@@ -1,12 +1,12 @@
 package com.cursosant.insurance.registerModule.viewModel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cursosant.insurance.R
-import com.cursosant.insurance.common.entities.RegisterResponse
-import com.cursosant.insurance.common.entities.User
 import com.cursosant.insurance.common.viewModel.BaseViewModel
 import com.cursosant.insurance.registerModule.model.RegisterRepository
+import com.cursosant.insurance.registerModule.model.RegisterResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -29,14 +29,58 @@ class RegisterViewModel @Inject constructor(
     private val repository: RegisterRepository
 ) : BaseViewModel() {
 
-    private val _registerResult = MutableLiveData<RegisterResponse>()
-    val registerResult: LiveData<RegisterResponse> = _registerResult
+    private val _registerResult = MutableLiveData<RegisterResult.Success>()
+    val registerResult: LiveData<RegisterResult.Success> = _registerResult
+
+    private val _dialogConfig = MutableLiveData<RegisterDialogConfig?>()
+    val dialogConfig: LiveData<RegisterDialogConfig?> = _dialogConfig
 
     fun register(first: String, last: String, email: String, pass: String) {
         executeAction {
             repository.register(first, last, email, pass) { result ->
-                _registerResult.postValue(result)
+                when (result) {
+                    is RegisterResult.Success -> {
+                        _registerResult.postValue(result)
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.register_success_title,
+                                messageRes = R.string.register_user_created,
+                                navigateToLogin = true
+                            )
+                        )
+                    }
+                    RegisterResult.AlreadyRegisteredInactive -> {
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.dialog_warning_title,
+                                messageRes = R.string.register_user_exists_inactive,
+                                navigateToLogin = false
+                            )
+                        )
+                    }
+                    RegisterResult.AlreadyRegisteredActive -> {
+                        _dialogConfig.postValue(
+                            RegisterDialogConfig(
+                                titleRes = R.string.dialog_warning_title,
+                                messageRes = R.string.register_user_already_active,
+                                navigateToLogin = true
+                            )
+                        )
+                    }
+                }
+
             }
         }
     }
+
+    fun onDialogConsumed() {
+        _dialogConfig.value = null
+    }
+
 }
+
+data class RegisterDialogConfig(
+    @StringRes val titleRes: Int,
+    @StringRes val messageRes: Int,
+    val navigateToLogin: Boolean
+)

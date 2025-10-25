@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="com.cursosant.insurance.policiesModule.viewModel.PoliciesViewModel" />
@@ -17,8 +18,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/paginationContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_policy"/>
 
         <include
@@ -31,5 +36,54 @@
             layout="@layout/retry_query"
             app:isEmpty="@{!viewModel.inProgress &amp;&amp; viewModel.policies.size() == 0}"
             app:msg="@{@string/policies_empty_msg}"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/paginationContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="@{viewModel.isPaginationVisible ? View.VISIBLE : View.GONE}"
+            app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPrevious"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/policies_previous"
+                    android:enabled="@{viewModel.canGoPrevious}"/>
+
+                <TextView
+                    android:id="@+id/tvPageIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@{viewModel.pageIndicator}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    tools:text="Página 1 de 3 · 21 pólizas"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNext"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/policies_next"
+                    android:enabled="@{viewModel.canGoNext}"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

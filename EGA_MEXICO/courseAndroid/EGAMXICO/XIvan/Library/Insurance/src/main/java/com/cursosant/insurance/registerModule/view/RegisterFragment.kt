@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,7 +14,9 @@ import com.cursosant.insurance.common.utils.NavUtils
 import com.cursosant.insurance.common.utils.UiUtils
 import com.cursosant.insurance.common.utils.Utils
 import com.cursosant.insurance.databinding.FragmentRegisterBinding
+import com.cursosant.insurance.registerModule.viewModel.RegisterDialogConfig
 import com.cursosant.insurance.registerModule.viewModel.RegisterViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,6 +46,7 @@ open class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+    private var messageDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
@@ -71,6 +75,10 @@ open class RegisterFragment : Fragment() {
             vm.snackbarWarning.observe(viewLifecycleOwner) { resMsg ->
                 uiUtils.snackbarWarning(binding.root, resMsg)
             }
+            vm.dialogConfig.observe(viewLifecycleOwner) { config ->
+                config?.let { showRegisterDialog(it) }
+            }
+
             vm.isHideKeyboard.observe(viewLifecycleOwner) { isHide ->
                 if (isHide) uiUtils.hideKeyboard(binding.root)
             }
@@ -134,6 +142,8 @@ open class RegisterFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        messageDialog?.dismiss()
+        messageDialog = null
         _binding = null
     }
 
@@ -166,5 +176,26 @@ open class RegisterFragment : Fragment() {
             tilPasswordConfirm.hintTextColor = colorState
             tilPasswordConfirm.boxStrokeColor = color
         }
+    }
+
+    private fun showRegisterDialog(config: RegisterDialogConfig) {
+        val currentBinding = _binding ?: return
+        if (messageDialog?.isShowing == true) return
+
+        messageDialog = MaterialAlertDialogBuilder(currentBinding.root.context)
+            .setTitle(config.titleRes)
+            .setMessage(config.messageRes)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setOnDismissListener {
+                currentBinding.viewModel?.onDialogConsumed()
+                messageDialog = null
+                if (config.navigateToLogin) {
+                    navUtils.run { navController.navigate(actionRegisterToLogin) }
+                }
+            }
+            .setCancelable(false)
+            .show()
     }
 }

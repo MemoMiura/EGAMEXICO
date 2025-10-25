@@ -5,7 +5,8 @@ data class PolicyReceipt(val recibo_numero: Int,
                          val fecha_inicio: String,
                          val fecha_fin: String,
                          val prima_total: String,
-                         val id: Long){
+                         val id: Long,
+                         val vencimiento: String? = null){
     fun getStatusByGroup(): String {
         val statusGrouped = when(status) {
             "Liquidado",

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -6,6 +8,21 @@ plugins {
     id("androidx.navigation.safeargs.kotlin") // solo si usas SafeArgs en este módulo
     id("kotlin-parcelize")
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+val debugMiuraboxBaseUrl = localProperties.getProperty("miurabox.baseUrl.debug")
+    ?: localProperties.getProperty("miurabox.baseUrl")
+    ?: "http://127.0.0.1:8000/"
+
+val releaseMiuraboxBaseUrl = localProperties.getProperty("miurabox.baseUrl.release")
+    ?: localProperties.getProperty("miurabox.baseUrl")
+    ?: "https://users-api.miurabox.com/"
 
 android {
     namespace = "com.cursosant.insurance"
@@ -17,6 +34,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         dataBinding = true
     }
 
@@ -28,27 +46,46 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "MIURABOX_BASE_URL", "\"$debugMiuraboxBaseUrl\"")
+        }
+        getByName("release") {
+            buildConfigField("String", "MIURABOX_BASE_URL", "\"$releaseMiuraboxBaseUrl\"")
+        }
+    }
 }
 
 dependencies {
+    val coreKtxVersion = "1.12.0"
+    val appcompatVersion = "1.6.1"
+    val materialVersion = "1.8.0"
+    val hiltVersion = "2.47"
+    val navigationVersion = "2.6.0"
+    val lifecycleVersion = "2.6.2"
+
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.24"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation("androidx.core:core-ktx:$coreKtxVersion")
+    implementation("androidx.appcompat:appcompat:$appcompatVersion")
+    implementation("com.google.android.material:material:$materialVersion")
 
     // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
     kapt("androidx.hilt:hilt-compiler:1.1.0")
 
     // Navigation
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
     // Lifecycle
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     // Retrofit + OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -60,13 +97,16 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-messaging-ktx")
 
+    // Google Mobile Ads
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Tests
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
@@ -79,7 +119,9 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // PDF Viewer
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
 
 
     // javax.inject
